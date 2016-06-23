@@ -28,13 +28,26 @@ def setup(title,categories):
 	for i in range(categories):
 		topline_f += topline
 	outfile.write(into.format(*topline_f) + "\n")
+<<<<<<< HEAD
 	with open(sys.argv[1] + ".out", 'r') as myfile:
 		data = myfile.readlines()
+=======
+	try:
+		with open(sys.argv[1] + ".out", 'r') as myfile:
+		    data = myfile.readlines()
+	except:
+		print "Invalid input file name"
+		sys.exit()
+>>>>>>> ad3bd4c5e52d6e121e8b341c7446e5bbcbb18f79
 	i = 0
 	years = 0
 	base_year = int(data[9])
 	for line in data:
+<<<<<<< HEAD
 		if line.find(title + "     ") != -1 or line.find(title + "\n") != -1 and line.find("Acute " + title) == -1: #find CORRECT title (e.g. not title + ' rate %' or 'Acute ' + title)
+=======
+		if line.find(title + "     ") != -1 or line.find(title + "\n") != -1 and line.find("Acute " + title) == -1:
+>>>>>>> ad3bd4c5e52d6e121e8b341c7446e5bbcbb18f79
 			if categories != 1:
 				print_lines(i+7, years,data,outfile,base_year,categories)
 			else:
@@ -42,6 +55,7 @@ def setup(title,categories):
 			years += 1
 		i+=1
 	outfile.write("\n")
+<<<<<<< HEAD
 
 def setup2(title,categories,ctg_list,linesdown):
 	outfile.write(title + '\n')
@@ -77,6 +91,45 @@ if not os.path.isfile(sys.argv[1] + ".out"):
 fname = sys.argv[1] + ".frmt"
 outfile = open(fname,'w')
 
+=======
+
+def setup2(title,categories,ctg_list,linesdown):
+	outfile.write(title + '\n')
+	topline_f = []
+	into = '{:>12} ' + '{:>15} '*(12*categories-1)
+	for i in range(categories):
+		topline_f += topline
+	if len(ctg_list) > 0:
+		line2 = '{:>15}' + '{:>190} '*(categories-1)
+		outfile.write(line2.format(*ctg_list) + "\n")
+	else:
+		topline_f = ['M35-44',   'M45-54',   'M55-64',   'M65-74',   'M75-84',   'M85-94', 'M35-44',   'M45-54',   'M55-64',   'M65-74',   'M75-84',   'M85-94',  'F35-44',   'F45-54',   'F55-64',   'F65-74',   'F75-84',   'F85-94', 'F35-44',   'F45-54',   'F55-64',   'F65-74',   'F75-84',   'F85-94']
+		into = '{:>12} {:>15} {:>15} {:>15} {:>15} {:>15} {:>11} {:>16} {:>16} {:>16} {:>16} {:>14} {:>15} {:>15} {:>15} {:>15} {:>15} {:>15} {:>11} {:>16} {:>16} {:>16} {:>16} {:>16}'
+	outfile.write('Year')
+	outfile.write(into.format(*topline_f) + "\n")
+	try:
+		with open(sys.argv[1] + ".out", 'r') as myfile:
+		    data = myfile.readlines()
+	except:
+		print "Invalid input file name"
+		sys.exit()
+	i = 0
+	years = 0
+	base_year = int(data[9])
+	for line in data:
+		if line.find(title + "     ") != -1 or line.find(title + "\n") != -1:
+			print_lines(i+linesdown, years,data,outfile,base_year,categories)
+			years += 1
+		i+=1
+	outfile.write("\n")
+
+
+topline = ['M35-44',   'M45-54',   'M55-64',   'M65-74',   'M75-84',   'M85-94',   'F35-44',   'F45-54',   'F55-64',   'F65-74',   'F75-84',   'F85-94']
+
+fname = sys.argv[1] + ".frmt"
+outfile = open(fname,'w')
+
+>>>>>>> ad3bd4c5e52d6e121e8b341c7446e5bbcbb18f79
 setup("NEW CHD CASES",2)
 setup2("CVD PREVALENCE - first of year",2,[],2)
 setup("NEW INTERVENED CHD CASES",2)
