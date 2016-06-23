@@ -1,6 +1,8 @@
 import sys
 import os.path
 
+
+
 def print_lines(n,y,data,outfile,base_year,categories):
 	frmt_data = []
 	#get correct data/lines and remove extra characters
