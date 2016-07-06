@@ -1,28 +1,51 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 import sys
 import os.path
 import re
 
-
+#asb
 def print_lines(n,y,data,outfile,base_year,categories):
+	"""Add one section of numbers to .frmt file.
+
+	Args:
+		n: integer representing line in data file
+		y: integer representing current year - base_year
+		data: list of (string) lines in .out file
+		outfile: .frmt file to write to
+		base_year: integer first year simulation is run on
+		categories: integer number of categories to consider
+	"""
+
 	frmt_data = []
 	#get correct data/lines and remove extra characters
 	for i in range(n,n+6):
 		data[i] = data[i].replace('. ', '') 
 		data[i] = data[i].replace('.\n','')
+		#this is for CVD prevalence -- don't want 'x/y' just want rate
 		data[i] = re.sub(r'[0-9]*./ \s*[0-9]*','',data[i])
 		frmt_data += [s for s in data[i].split()]
-	outfile.write(str(base_year + y) )
+	outfile.write(str(base_year + y))
 	line = []
 	#get data in correct order
 	for i in range(categories*2):
 		for j in range(6):
 			line.append(frmt_data[i + (categories*2 + 1)*j + 1])
-	#format output
 	into = '{:>12} ' + '{:>15} '*(12*categories-1) 
 	outfile.write(into.format(*line) + "\n")
 
+
 def setup(title,categories):
+	"""Wrapper for creating .frmt file.
+
+	Used for default formats -- two categories with
+	Age/Sex and CHD incedence rate or one category
+	which is Age/Sex Breakdown
+
+	Args:
+		title: label to look for e.g. "NEW CHD CASES"
+		categories: integer number of categories to look for
+	"""
+
 	outfile.write(title + '\n')
 	outfile.write('Year')
 	into = '{:>12} ' + '{:>15} '*(12*categories-1)
@@ -36,16 +59,30 @@ def setup(title,categories):
 	years = 0
 	base_year = int(data[9])
 	for line in data:
-		if line.find(title + "     ") != -1 or line.find(title + "\n") != -1 and line.find("Acute " + title) == -1: #find CORRECT title (e.g. not title + ' rate %' or 'Acute ' + title)
-			if categories != 1:
+		#find CORRECT title (e.g. not title + ' rate %' or 'Acute ' + title)
+		if (line.find(title + "     ") != -1 or 
+			line.find(title + "\n") != -1 and 
+			line.find("Acute " + title) == -1): 
+			#sections with >1 category have 7 lines before the numbers
+			if categories != 1:  
 				print_lines(i+7, years,data,outfile,base_year,categories)
+			#sections with 1 category have 6 lines before numbers
 			else:
 				print_lines(i+6, years,data,outfile,base_year,categories)
 			years += 1
 		i+=1
 	outfile.write("\n")
 
+
 def setup2(title,categories,ctg_list,linesdown):
+	"""Wrapper for creating .frmt file.
+
+	Args:
+		title: label to look for e.g. "NEW CHD CASES"
+		categories: integer number of categories to look for
+		ctg_list: list of string titles of categories (len(ctg_list)=categories)
+		linesdown: integer number of lines below title to look for numbers
+	"""
 	outfile.write(title + '\n')
 	topline_f = []
 	into = '{:>12} ' + '{:>15} '*(12*categories-1)
@@ -61,14 +98,18 @@ def setup2(title,categories,ctg_list,linesdown):
 	years = 0
 	base_year = int(data[9])
 	for line in data:
-		if line.find(title + "     ") != -1 or line.find(title + "\n") != -1: #find CORRECT title (e.g. not title + ' rate %')
+		#if we find CORRECT title (e.g. not title + ' rate %')
+		if (line.find(title + "     ") != -1 or 
+			line.find(title + "\n") != -1):
 			print_lines(i+linesdown, years,data,outfile,base_year,categories)
 			years += 1
 		i+=1
 	outfile.write("\n")
 
 
-topline = ['M35-44',   'M45-54',   'M55-64',   'M65-74',   'M75-84',   'M85-94',   'F35-44',   'F45-54',   'F55-64',   'F65-74',   'F75-84',   'F85-94']
+topline = ['M35-44',   'M45-54',   'M55-64',   'M65-74',   'M75-84',   'M85-94',   
+			'F35-44',   'F45-54',   'F55-64',   'F65-74',   'F75-84',   'F85-94']
+
 if not os.path.isfile(sys.argv[1] + ".out"):
 	print("Invalid File Name")
 	sys.exit()
