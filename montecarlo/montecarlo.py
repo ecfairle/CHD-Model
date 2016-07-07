@@ -13,6 +13,15 @@ def main():
 	VaryCst("cstval").vary()
 
 class Varier:
+	"""Vary data file according to distribution
+
+
+	Attributes:
+		fname: A string representing the name of a .dat file
+		spaces: Integer number of spaces before the leftmost number
+		format: Format string defining the way to output numbers to the output 
+		file
+	"""	
 	def __init__(self, fname, spaces, format):
 		self.f = open('modfile/' + fname + '.mc','w')
 		self.means = read_lines(fname + '.dat')
@@ -46,10 +55,10 @@ class VaryDat(Varier):
 		
 	Creates *_mc.dat from *_mc0.dat
 
-	Args:
-		fname: a string representing the name of a .dat file
-		spaces: integer number of spaces before the leftmost number
-		format: format string defining the way to output numbers to the output 
+	Attributes:
+		fname: A string representing the name of a .dat file
+		spaces: Integer number of spaces before the leftmost number
+		format: Format string defining the way to output numbers to the output 
 		file
 	"""	
 	def __init__(self, fname, spaces=11, format="   %9.6f"):
@@ -72,9 +81,9 @@ class VaryCst(Varier):
 	Creates cstval_mc.mc from cstval_mc0.dat. Specifically for cost files
 	
 	Args:
-		fname: a string representing the name of a .dat file
-		spaces: integer number of spaces before the leftmost number
-		format: format string defining the way to output numbers to the output file
+		fname: A string representing the name of a .dat file
+		spaces: Integer number of spaces before the leftmost number
+		format: Format string defining the way to output numbers to the output file
 	"""	
 
 	def __init__(self, fname, spaces=3, format="%-8.2f       "):
@@ -100,41 +109,27 @@ class VaryInp:
 
 	def vary(self):
 		for line in self.means:
-			replace = 0
-			for tup in self.std:
-				if line.find(tup[0])!=-1:
-					if replace == 1:
-						print "error: keywords overlap"
-					out = float(line.split()[0]) + np.random.randn()*float(tup[1])
-					print>>self.f, out
-					replace = 1
-			if replace == 0:
-				replace_line(self.f,line)
+			self._vary_line(line)
 		self.f.close()
 
 	def _vary_line(self,line):
 		replace = 0
-		for tup in std:
-			if _find_keyword(line,tup[0]):
+		for tup in self.std:
+			if self._find_keyword(line,tup[0]):
 				if replace == 1:
 					print "error: keywords overlap"
 				out = float(line.split()[0]) + np.random.randn()*float(tup[1])
-				print>>f, out
+				print>>self.f, out
 				replace = 1
 		if replace == 0:
-			replace_line(f,line)
+			replace_line(self.f,line)
 
-	def _find_keyword(line,key):
+	def _find_keyword(self,line,key):
 		return line.find(key)!=-1
 
 
 def replace_line(f,line):
 	print>>f, line,
-
-
-def norm_row_corr(mean, std):
-	rnd = np.random.randn()
-	return [max(float(x)+rnd*float(y),0) for x,y in zip(mean,std)]
 
 
 def is_num_line(line):
