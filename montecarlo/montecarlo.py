@@ -69,9 +69,9 @@ class VaryDat(Varier):
 	def _dist(self, mean, std):
 		if self.n_line%6 == 0: 
 			self.rnd = np.random.randn(len(mean)-1)
+		self.n_line += 1
 		return [float(x[0])+self.rnd[i]*float(x[1]) for i,
 						x in enumerate(zip(mean[1:],std[1:]))]
-		self.n_line += 1
 
 	
 class VaryCst(Varier):
