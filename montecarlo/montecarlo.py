@@ -1,19 +1,46 @@
 #!/usr/bin/env python
 from operator import add
 import numpy as np
-from __future__ import absolute_import, division, print_function
+
 
 def main():
 	#Change these to change which files to simulate with
-	inp('ATP_mc')
-	age_range("bdia_mc0")
-	age_range("Bstk_mc0")
-	age_range("B_mc0")
-	age_range("QOL_mc0",5,"   %6.4f")
-	cst("cstval")
+	VaryInp('ATP_mc').vary()
+	VaryDat("bdia_mc0").vary()
+	VaryDat("Bstk_mc0").vary()
+	VaryDat("B_mc0").vary()
+	VaryDat("QOL_mc0",5,"   %6.4f").vary()
+	VaryCst("cstval").vary()
 
+class Varier:
+	def __init__(self, fname, spaces, format):
+		self.f = open('modfile/' + fname + '.mc','w')
+		self.means = read_lines(fname + '.dat')
+		self.std = read_lines(fname + '.dat')
+		self.spaces = spaces
+		self.format = format
 
-def age_range(fname, spaces=11, format="   %9.6f"):
+	def _format_lst(self, _lst):
+		fstring = ' '*self.spaces + self.format*len(_lst)
+		print>>self.f, fstring % tuple(_lst)
+
+	def vary(self):
+		for mean_line,std_line in zip(self.means,self.std):
+			self._vary_line(mean_line,std_line)
+		self.f.close()
+
+	def _vary_line(self,mean_line,std_line):
+		sp_mean_line = mean_line.split()
+		sp_std_line = std_line.split()
+		if is_num_line(sp_mean_line):
+			sp_out = self._dist(sp_mean_line,sp_std_line)
+			self._format_lst(sp_out)
+		else: 
+			replace_line(self.f,mean_line)
+
+	def _dist(self, *dist_args): pass
+
+class VaryDat(Varier):
 	""" Create normally distributed data file from .dat file, std file
 	of the same format.
 		
@@ -25,31 +52,20 @@ def age_range(fname, spaces=11, format="   %9.6f"):
 		format: format string defining the way to output numbers to the output 
 		file
 	"""	
+	def __init__(self, fname, spaces=11, format="   %9.6f"):
+		Varier.__init__(self,fname, spaces, format)
+		self.n_line = 0
+
+
+	def _dist(self, mean, std):
+		if self.n_line%6 == 0: 
+			self.rnd = np.random.randn(len(mean)-1)
+		return [float(x[0])+self.rnd[i]*float(x[1]) for i,
+						x in enumerate(zip(mean[1:],std[1:]))]
+		self.n_line += 1
+
 	
-	with open("modfile/" + fname + '.dat') as f:
-		means = f.readlines()
-	with open("modfile/" + fname + '.dat') as f:
-		std = f.readlines()
-	f = open('modfile/' + fname + '.mc','w')
-	n_line = 0
-	for l1,l2 in zip(means,std):
-		sp1 = l1.split()
-		sp2 = l2.split()
-		#if we're in section with numbers 
-		if len(sp1) > 1 and sp1[0][0] >= '1' and sp1[0][0] <= '9':
-			if n_line%6 == 0: 
-				rnd = np.random.randn(len(sp1)-1)
-			sp_out = [float(x[0])+rnd[i]*float(x[1]) for i,
-						x in enumerate(zip(sp1[1:],sp2[1:]))]
-			fstring = ' '*spaces + format*len(sp_out)
-			n_line += 1
-			print>>f, fstring % tuple(sp_out)
-		else: 	#if we're not in section with numbers just replace line 
-			print>>f, l1,
-	f.close()
-
-
-def cst(fname, spaces=3, format="%-8.2f       "):
+class VaryCst(Varier):
 	""" Create lognormally distributed data file from mean, std files
 	of the same format.
 		
@@ -61,58 +77,77 @@ def cst(fname, spaces=3, format="%-8.2f       "):
 		format: format string defining the way to output numbers to the output file
 	"""	
 
-	with open("modfile/" + fname + '.dat') as f:
-		means = f.readlines()
-	with open("modfile/" + fname + '.dat') as f:
-		std = f.readlines()
-	f = open('modfile/' + fname + '.mc','w')
-	for l1,l2 in zip(means,std):
-		sp1 = l1.split()
-		sp2 = l2.split()
-		#if we're in section with numbers
-		if len(sp1) > 0 and sp1[0][0] >= '0' and sp1[0][0] <= '9':	 
-			rnd = np.random.randn()
-			sp_out = [max(float(x)+rnd*float(y),0) for x,y in zip(sp1,sp2)]
-			fstring = ' '*spaces + format*len(sp_out)
-			print>>f, fstring % tuple(sp_out)
-		else:  #if we're not in section with numbers just replace line
-			print>>f, l1,
-	f.close()
+	def __init__(self, fname, spaces=3, format="%-8.2f       "):
+		Varier.__init__(self,fname, spaces, format)
+
+	def _dist(self, mean, std):
+		rnd = np.random.randn()
+		return [max(float(x)+rnd*float(y),0) for x,y in zip(mean,std)]
 
 
-def inp(fname):
-	""" Create normally distributed input file from a .inp file
-	and related 
+class VaryInp:
+	def __init__(self, fname):
+		self.f = open(fname + '.mc','w')
+		self.rd = read_lines(fname + '.sdind')
+		self. means = read_lines(fname + '.inp')
+		self.std = []
+		self._build_std()
 		
-	Creates *_mc0.inp from *_mc.inp. Specifically for the .inp file
-	
-	Args:
-		fname: a string representing the name of a .inp file
-	"""	
+	def _build_std(self):		
+		for line in self.rd:
+			sp = line.split(',')
+			self.std.append((sp[0], sp[1]))
 
-	with open(fname + '.sdind') as f:
-		rd = f.readlines()
-	std = []
-	#collects keywords and standard deviations as tuples
-	for line in rd:
-		sp = line.split(',')
-		std.append((sp[0], sp[1]))  
-	with open(fname + '.inp') as f:
-		means = f.readlines()
+	def vary(self):
+		for line in self.means:
+			replace = 0
+			for tup in self.std:
+				if line.find(tup[0])!=-1:
+					if replace == 1:
+						print "error: keywords overlap"
+					out = float(line.split()[0]) + np.random.randn()*float(tup[1])
+					print>>self.f, out
+					replace = 1
+			if replace == 0:
+				replace_line(self.f,line)
+		self.f.close()
 
-	f = open(fname + '.mc','w')
-	for line in means:
+	def _vary_line(self,line):
 		replace = 0
 		for tup in std:
-			if line.find(tup[0])!=-1:
+			if _find_keyword(line,tup[0]):
 				if replace == 1:
 					print "error: keywords overlap"
 				out = float(line.split()[0]) + np.random.randn()*float(tup[1])
 				print>>f, out
 				replace = 1
 		if replace == 0:
-			print>>f, line,
-	f.close()
+			replace_line(f,line)
+
+	def _find_keyword(line,key):
+		return line.find(key)!=-1
+
+
+def replace_line(f,line):
+	print>>f, line,
+
+
+def norm_row_corr(mean, std):
+	rnd = np.random.randn()
+	return [max(float(x)+rnd*float(y),0) for x,y in zip(mean,std)]
+
+
+def is_num_line(line):
+	return len(line) > 0 and line[0][0] >= '0' and line[0][0] <= '9'
+
+
+def read_lines(fname):
+	if fname[-3:] == 'dat':
+		with open("modfile/" + fname) as f:
+			return f.readlines()
+	else:
+		with open(fname) as f:
+			return f.readlines()
 
 
 if __name__ == '__main__':
