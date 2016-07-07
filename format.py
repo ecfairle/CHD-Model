@@ -3,7 +3,7 @@ import sys
 import os.path
 import re
 
-#asb
+#asbasdas
 def print_lines(n,y,data,outfile,base_year,categories):
 	"""Add one section of numbers to .frmt file.
 

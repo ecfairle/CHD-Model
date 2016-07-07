@@ -1,0 +1,42 @@
+   Please note; If the varibles are not singular the following format exits:
+   male 35-44    male 45-54    male 55-64     male 65-74      male 75-84
+   female 35-44  female 45-54  female 55-64   female 65-74    female 75-84.
+   If only 1 row exists no sex specific information is defined.
+
+   Annual probability of arrest, with or without an MI
+   given history of MI -     
+   0.0190
+
+   Annual probability of MI, without an arrest given,
+   history of MI - male  female
+   0.0460   0.0389
+
+   Annual coronary attack rate (MI or arrest),
+   history of angina only, 45-74 years old, by sex - male female
+   0.0243   0.0103 
+
+   Probability of re-arrest in first year after arrest  -     
+   
+   0.0689
+
+   Probability of re-arrest in subsequent year after arrest -    
+   
+   0.0315
+
+   Probability of MI in first year after arrest -     
+
+   0.0472
+
+   Probability of MI in subsequent year after arrest -     
+   
+   0.0214
+
+   Fractional reduction in coronary attack rate (MI, arrest)
+   due to revasc., relative to angina patients -     
+   0.2500
+
+   Number of revascularizations in each age and sex group
+
+   25410.0        87570.0       143500.0       126500.0        24120.0
+    3601.0        25820.0        54620.0        63150.0        21980.0
+

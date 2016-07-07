@@ -4,6 +4,9 @@ import os.path
 
 
 def print_lines(n,y,data,outfile,base_year,categories):
+	"""
+
+	"""
 	frmt_data = []
 	#get correct data/lines and remove extra characters
 	for i in range(n,n+6):
@@ -18,7 +21,6 @@ def print_lines(n,y,data,outfile,base_year,categories):
 	for i in range(categories*2):
 		for j in range(6):
 			line.append(frmt_data[i + (categories*2 + 1)*j + 1])
-	#format output
 	into = '{:>12} ' + '{:>15} '*(12*categories-1) 
 	outfile.write(into.format(*line) + "\n")
 

@@ -1,56 +1,66 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 from operator import add
 import numpy as np
+from __future__ import absolute_import, division, print_function
 
 def main():
 	#Change these to change which files to simulate with
 	inp('ATP_mc')
-	age_range("bdia_mc0",10,"   %9.6f")
-	age_range("Bstk_mc0",10,"   %9.6f")
-	age_range("B_mc0",10,"   %9.6f")
-	age_range("QOL_mc0",0,"   %6.4f")
-	cst("cstval",3,"      %8.2f")
+	age_range("bdia_mc0")
+	age_range("Bstk_mc0")
+	age_range("B_mc0")
+	age_range("QOL_mc0",5,"   %6.4f")
+	cst("cstval")
 
 
-def age_range(fname,spaces,format):
-	""" Create normally distributed data file from .dat, std files
+def age_range(fname, spaces=11, format="   %9.6f"):
+	""" Create normally distributed data file from .dat file, std file
 	of the same format.
 		
-	Creates {fname}.mc from {fname}.dat
+	Creates *_mc.dat from *_mc0.dat
 
 	Args:
 		fname: a string representing the name of a .dat file
 		spaces: integer number of spaces before the leftmost number
-		format: format string defining the way to output numbers to the output file
+		format: format string defining the way to output numbers to the output 
+		file
 	"""	
+	
 	with open("modfile/" + fname + '.dat') as f:
 		means = f.readlines()
 	with open("modfile/" + fname + '.dat') as f:
 		std = f.readlines()
 	f = open('modfile/' + fname + '.mc','w')
+	n_line = 0
 	for l1,l2 in zip(means,std):
 		sp1 = l1.split()
 		sp2 = l2.split()
-		if len(sp1) > 1 and sp1[0] >= '1' and sp1[0] <= '9': 	#if we're in section with numbers
-			sp_out = [float(x)+np.random.randn()*float(y) for x,y in zip(sp1[1:],sp2[1:])]
-			fstring = format*len(sp_out)
-			print>>f, ' '*spaces + sp1[0],
+		#if we're in section with numbers 
+		if len(sp1) > 1 and sp1[0][0] >= '1' and sp1[0][0] <= '9':
+			if n_line%6 == 0: 
+				rnd = np.random.randn(len(sp1)-1)
+			sp_out = [float(x[0])+rnd[i]*float(x[1]) for i,
+						x in enumerate(zip(sp1[1:],sp2[1:]))]
+			fstring = ' '*spaces + format*len(sp_out)
+			n_line += 1
 			print>>f, fstring % tuple(sp_out)
-		else: 	#if we're not in section with numbers just replace line
+		else: 	#if we're not in section with numbers just replace line 
 			print>>f, l1,
 	f.close()
 
-def cst(fname,spaces,format):
+
+def cst(fname, spaces=3, format="%-8.2f       "):
 	""" Create lognormally distributed data file from mean, std files
 	of the same format.
 		
-	Creates {fname}.mc from {fname}.dat. Specifically for cost files
+	Creates cstval_mc.mc from cstval_mc0.dat. Specifically for cost files
 	
 	Args:
 		fname: a string representing the name of a .dat file
 		spaces: integer number of spaces before the leftmost number
 		format: format string defining the way to output numbers to the output file
 	"""	
+
 	with open("modfile/" + fname + '.dat') as f:
 		means = f.readlines()
 	with open("modfile/" + fname + '.dat') as f:
@@ -59,32 +69,34 @@ def cst(fname,spaces,format):
 	for l1,l2 in zip(means,std):
 		sp1 = l1.split()
 		sp2 = l2.split()
-		print sp1
-		print sp2
-		if len(sp1) > 1 and sp1[0][0] >= '0' and sp1[0][0] <= '9':	 #if we're in section with numbers
-			sp_out = [float(x)+np.random.randn()*float(y) for x,y in zip(sp1,sp2)]
-			print sp_out
-			fstring = format*len(sp_out)
+		#if we're in section with numbers
+		if len(sp1) > 0 and sp1[0][0] >= '0' and sp1[0][0] <= '9':	 
+			rnd = np.random.randn()
+			sp_out = [max(float(x)+rnd*float(y),0) for x,y in zip(sp1,sp2)]
+			fstring = ' '*spaces + format*len(sp_out)
 			print>>f, fstring % tuple(sp_out)
 		else:  #if we're not in section with numbers just replace line
 			print>>f, l1,
 	f.close()
 
+
 def inp(fname):
 	""" Create normally distributed input file from a .inp file
 	and related 
 		
-	Creates {fname}.mc from {fname}.inp. Specifically for the .inp file
+	Creates *_mc0.inp from *_mc.inp. Specifically for the .inp file
 	
 	Args:
-		fname: a string representing the name of a .dat file
+		fname: a string representing the name of a .inp file
 	"""	
+
 	with open(fname + '.sdind') as f:
 		rd = f.readlines()
 	std = []
+	#collects keywords and standard deviations as tuples
 	for line in rd:
 		sp = line.split(',')
-		std.append((sp[0], sp[1]))  #collects keywords and standard deviations as tuples
+		std.append((sp[0], sp[1]))  
 	with open(fname + '.inp') as f:
 		means = f.readlines()
 
@@ -101,6 +113,7 @@ def inp(fname):
 		if replace == 0:
 			print>>f, line,
 	f.close()
+
 
 if __name__ == '__main__':
     main()

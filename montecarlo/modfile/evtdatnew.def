@@ -1,0 +1,97 @@
+   Please note; If the varibles are not singular the following format exits:
+   male 35-44    male 45-54    male 55-64     male 65-74      male 75-84
+   female 35-44  female 45-54  female 55-64   female 65-74    female 75-84.
+   If only 1 row exists no sex specific information is defined.
+
+     Annual probability of arrest in the first 11 mo after initial MI (ph1miar)
+
+     0.0039       0.0042       0.0061       0.0084       0.0140
+     0.0008       0.0015       0.0032       0.0052       0.0117
+
+     Annual probability of arrest in subsequent years after initial MI (phxmiar)
+
+     0.0043       0.0046       0.0067       0.0092       0.0153
+     0.0009       0.0017       0.0035       0.0057       0.0128
+
+     Probability of arrest given history of angina only 11 months (phang1ar)
+
+     0.0020       0.0022       0.0032       0.0044       0.0073
+     0.0004       0.0008       0.0017       0.0027       0.0061
+
+     Probability of arrest given history of angina only (phangxar)
+
+     0.0022       0.0024       0.0035       0.0048       0.0080
+     0.0005       0.0009       0.0018       0.0030       0.0067
+
+    Annual probability of MI in the first 11 months after MI  (ph1mimi) 
+
+     0.0982       0.1160       0.1309       0.1602       0.2111
+     0.0395       0.0773       0.0942       0.1415       0.1990
+
+     Annual probability of MI in subsequent  years after MI  (phxmimi) 
+
+     0.0290       0.0342       0.0386       0.0472       0.0622
+     0.0117       0.0228       0.0278       0.0417       0.0587
+
+     Annual probability of MI in the first 11 mo after initial angina (phang1mi) 
+
+     0.0178       0.0246       0.0314       0.0287       0.0584
+     0.0126       0.0250       0.0285       0.0436       0.0668
+
+     Annual prob. of MI in the subseqent yrs after initial angina (phangxmi)
+
+     0.0052       0.0072       0.0093       0.0085       0.0172
+     0.0037       0.0074       0.0084       0.0128       0.0197
+     
+     NEW stuff
+ 
+     The reMI fraction of MIs (fremi).
+
+     0.205        0.259        0.311        0.393        0.412 
+     0.166        0.209        0.265        0.336        0.362
+
+     The Bridge Mi fraction of MIs (fbrmi).
+
+     0.6516       0.5932       0.5375       0.4844       0.4341
+     0.6782       0.6187       0.5619       0.5078       0.4564
+
+     Fractional reduction in coronary attack rate (MI, arrest)
+     due to revasc., relative to angina patients in DH -     
+     0.1000
+
+     Fractional reduction in coronary attack rate (MI, arrest)
+     due to revasc., relative to angina patients in Bridge -     
+     0.1000
+
+     Number of revascularizations in each age and sex group (NOTE: If changes are made here,adjustments 
+     should also be made to people with history of Mi and bridge survivors of Mi arrays below!) -
+     28485.0       112201.0       158414.0       163367.0        98598.0
+     11389.0        33815.0        58385.0        95355.0        78709.0
+
+     Number Of MI's estimated in 2000 - mibase
+
+     20110.0        59817.0        85205.0        95866.0       101592.0
+     6186.0         22374.0        37064.0        78920.0       103691.0
+
+     Number Of people with a history of MI estimated in 2000 -  chdUSmi 8/22/04
+
+      91231.0       313830.0       492411.0       592488.0       474973.0
+      68900.0       146806.0       260827.0       451540.0       413232.0
+
+     Number of bridge survivors estimated in 2000 -  chdUSbr
+
+      90004.0       154803.0       131699.0        86871.0        42920.0
+      27851.0        52509.0        75448.0        65513.0        53245.0
+
+     Number Of bridge survivors of MI estimated in 2000 - chdbrmi
+
+     12663.0        32510.0        41815.0        40186.0        35482.0
+      3902.0        12709.0        19543.0        34493.0        39260.0
+
+
+
+
+
+
+
+
