@@ -12,21 +12,25 @@ def main():
 	VaryDat("qol",5,"   %6.4f").vary()
 	#VaryCst("cstval").vary()
 
+
 class Varier:
 	"""Vary data file according to distribution
 
 
 	Attributes:
-		fname: A string representing the name of a .dat file
+		mc: file to output MC simulated data to
+		save: file to append lines to for checking validity of data
+		lines: Integer number of lines to add to 'save' file
 		spaces: Integer number of spaces before the leftmost number
 		format: Format string defining the way to output numbers to the output 
 		file
 	"""	
+
 	def __init__(self, fname, spaces, format, lines=1):
-		self.mc0 = open('modfile/' + fname + '_mc.dat','w')
+		self.mc = open('modfile/' + fname + '_mc.dat','w')
 		self.save = open('modfile/' + 'MC' + fname + '.txt','a')
-		self.means = read_lines(fname + '_mc.dat')
-		self.std = read_lines(fname + '_mc.dat')
+		self.means = read_lines('modfile/' + fname + '_mc0.dat')
+		self.std = read_lines('modfile/' + fname + '_mc0.dat')
 		self.spaces = spaces
 		self.lines = lines
 		self.format = format
@@ -38,18 +42,19 @@ class Varier:
 	def vary(self):
 		for mean_line,std_line in zip(self.means,self.std):
 			self._vary_line(mean_line,std_line)
-		self.mc0.close()
+		self.mc.close()
 
 	def _vary_line(self,mean_line,std_line):
 		sp_mean_line = mean_line.split()
 		sp_std_line = std_line.split()
 		if is_num_line(sp_mean_line):
 			sp_out = self._dist(sp_mean_line,sp_std_line)
-			self._format_lst(self.mc0,sp_out)
+			self._format_lst(self.mc,sp_out)
 		else: 
-			replace_line(self.mc0,mean_line)
+			replace_line(self.mc,mean_line)
 
 	def _dist(self, *dist_args): pass
+
 
 class VaryDat(Varier):
 	""" Create normally distributed data file from .dat file, std file
@@ -58,10 +63,8 @@ class VaryDat(Varier):
 	Creates *_mc.dat from *_mc0.dat
 
 	Attributes:
-		fname: A string representing the name of a .dat file
-		spaces: Integer number of spaces before the leftmost number
-		format: Format string defining the way to output numbers to the output 
-		file
+		Varier --
+		n_line: Integer number of data lines parsed
 	"""	
 
 	def __init__(self, fname, spaces=11, format="   %9.6f", lines=1):
@@ -81,20 +84,15 @@ class VaryDat(Varier):
 		self.n_line += 1
 		return rnd_out
 
-
-
 	
 class VaryCst(Varier):
-	""" Create lognormally distributed data file from mean, std files
+	""" Create normally distributed data file from mean, std files
 	of the same format.
 		
-	Creates cstval_mc.mc from cstval_mc0.dat. Specifically for cost files
+	Creates cstval_mc.dat from cstval_mc0.dat. Specifically for cost files
 	
 	Attributes:
-		fname: A string representing the name of a .dat file
-		spaces: Integer number of spaces before the leftmost number
-		format: Format string defining the way to output numbers to the output 
-		file
+		Varier --
 	"""	
 
 	def __init__(self, fname, spaces=3, format="%-8.2f       "):
@@ -106,16 +104,17 @@ class VaryCst(Varier):
 
 
 class VaryInp:
-	"""
+	""" Create normally varied .inp file.
 
 	Attributes:
-		means: list of lines in original file
-		std: list of lines in standard deviation file
-
+		mc: File to output MC simulated data to
+		rd: List of lines in standard deviation file
+		means: List of lines in original file
+		std: List of (key, value) tuples from standard dev. file
 	"""
 
 	def __init__(self, fname):
-		self.f = open(fname + '_mc.inp','w')
+		self.mc = open(fname + '_mc.inp','w')
 		self.rd = read_lines(fname + '.sdind')
 		self.means = read_lines(fname + '_mc0.inp')
 		self.std = []
@@ -129,7 +128,7 @@ class VaryInp:
 	def vary(self):
 		for line in self.means:
 			self._vary_line(line)
-		self.f.close()
+		self.mc.close()
 
 	def _vary_line(self,line):
 		replace = 0
@@ -139,10 +138,10 @@ class VaryInp:
 				if replace == 1:
 					print "error: keywords overlap"
 				out = float(line.split()[0]) + rnd[i]*float(tup[1])
-				print>>self.f, out
+				print>>self.mc, out
 				replace = 1
 		if replace == 0:
-			replace_line(self.f,line)
+			replace_line(self.mc,line)
 
 	def _find_keyword(self,line,key):
 		return line.find(key)!=-1
@@ -157,12 +156,8 @@ def is_num_line(line):
 
 
 def read_lines(fname):
-	if fname[-3:] == 'dat':
-		with open("modfile/" + fname) as f:
-			return f.readlines()
-	else:
-		with open(fname) as f:
-			return f.readlines()
+	with open(fname) as f:
+		return f.readlines()
 
 
 if __name__ == '__main__':
