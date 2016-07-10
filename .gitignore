@@ -5,4 +5,5 @@ basfiles
 *.chb
 *.std
 *.frmt
+*_old.*
 modfile
