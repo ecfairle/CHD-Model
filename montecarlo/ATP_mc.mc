@@ -38,8 +38,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; lowest risk
 2                          ; LDL
 1                          ; yes 10 year risk threshold
-0.0703858411535
--0.0979460784602
+0.104067727777
+0.268041175991
 1                          ; percent
 .1                        ; reduce Quarter-Low
 2,3,4                      ; age >45 (CELL 3- M 1RF- age)----------
@@ -60,8 +60,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; yes 10 year risk threshold
-0.00675234330275
-0.235467175415
+0.158137755943
+0.0943555511152
 1                          ; percent
 .0369                      ; reduce Quarter-switch
 2,3,4                      ; age >45 (CELL 3- M 1RF- age)----------
@@ -82,8 +82,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; yes 10 year risk threshold
-0.00454138137039
-0.0512850520949
+0.0209796033853
+0.423191651679
 1                          ; percent
 .1                      ; reduce Quarter-Low
 3,4                        ; age >55 (CELL 7- F 1RF- age)---------- 
@@ -104,8 +104,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; yes 10 year risk threshold
--0.0113482426928
-0.0705245704268
+-0.055511918163
+0.425248642932
 1                          ; percent
 .0369                      ; reduce Quarter-Switch
 3,4                        ; age >55 (CELL 7- F 1RF- age)----------
@@ -126,8 +126,8 @@ ATP3 with LDL checks for all persons 55-74
 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.108160078744
-0.0741356128719
+-0.125558973211
+0.298251625966
 1                          ; percent
 .4                        ; reduce Low
 2,3,4                      ; age >45 (CELL 1-age,d.,lbp,smok,hdl) [gap?]
@@ -148,8 +148,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.15246122167
-0.141814721173
+-0.0801823805893
+0.304526662161
 1                          ; percent
 .2462                     ; reduce SWITCH
 2,3,4                      ; age >45 (CELL 1-age,dbp,smok,hdl)
@@ -170,8 +170,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.0766803559181
-0.403320635623
+-0.0247897727746
+0.146032820046
 1                          ; percent
 .4                      ; reduce .4    
 2,3,4                      ; age >45 (CELL 2-age,dbp,smok) [7]
@@ -192,8 +192,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.173721398868
-0.261558111437
+0.0398363870867
+0.075048610204
 1                          ; percent
 .2462                     ; reduce .3147
 2,3,4                      ; age >45 (CELL 2-age,dbp,smok) [8]
@@ -214,8 +214,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0420106961956
-0.167779687646
+-0.13742276639
+0.162456276591
 1                          ; percent
 .4                      ; reduce .4    
 2,3,4                      ; age >45 (CELL 3-age,dbp,hdl) [9]
@@ -236,8 +236,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.107094895769
-0.0588916747844
+0.0390161232645
+-0.0268000209015
 1                          ; percent
 .2462                     ; reduce .3147
 2,3,4                      ; age >45 (CELL 3-age,dbp,hdl) [10]
@@ -258,8 +258,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.161328593824
--0.29890698437
+-0.0501832901028
+-0.0450799017552
 1                          ; percent
 .4                      ; reduce .4    
 2,3,4                      ; age >45 (CELL 4-age,smok,hdl) [11]
@@ -280,8 +280,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.120126477971
--0.164748523382
+0.0288431571933
+-0.0295093720169
 1                          ; percent
 .2462                     ; reduce .3147
 2,3,4                      ; age >45 (CELL 4-age,smok,hdl) [12]
@@ -302,8 +302,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.0565178824036
-0.353034065909
+-0.0388267154296
+-0.0538425577268
 1                          ; percent
 .4                      ; reduce .4  
 2,3,4                      ; age >45 (CELL 5-age,dbp) [13]
@@ -324,8 +324,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.136805627001
-0.0605740648061
+-0.129188503392
+-0.0866183477767
 1                          ; percent
 .2462                     ; reduce .3147
 2,3,4                      ; age >45 (CELL 5-age,dbp) [14]
@@ -346,8 +346,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.119203975857
-0.058972897128
+-0.221992730188
+-0.175844788646
 1                          ; percent
 .4                      ; reduce .4  
 2,3,4                      ; age >45 (CELL 6-age,smok) [15]
@@ -368,8 +368,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0395339604159
-0.243413710596
+-0.144480559296
+0.0993787623084
 1                          ; percent
 .2462                     ; reduce .3147
 2,3,4                      ; age >45 (CELL 6-age,smok) [16]
@@ -390,8 +390,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0379735466498
--0.18820668516
+0.0588410588176
+0.596935119872
 1                          ; percent
 .4                      ; reduce .4  
 2,3,4                      ; age >45 (CELL 7-age,hdl) [17]
@@ -412,8 +412,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--5.45976821456e-05
-0.205240427189
+-0.073239808432
+0.11730018969
 1                          ; percent
 .2462                     ; reduce .3147
 2,3,4                      ; age >45 (CELL 7-age,hdl) [18]
@@ -434,8 +434,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.170580061607
-0.224929761212
+0.0507806688969
+0.10105916925
 1                          ; percent
 .4                        ; reduce Low
 3,4                        ; age >55 (CELL 12-age,dbp,smok,hdl) [19]
@@ -456,8 +456,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016 [ok]
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.101311884974
-0.416502650347
+-0.0221323472596
+0.0689716428727
 1                          ; percent
 .2462                     ; reduce SWITCH
 3,4                        ; age >55 (CELL 12-age,dbp,smok,hdl) [20]
@@ -478,8 +478,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.175729718021
-0.140769278104
+-0.0699474315403
+0.451585519987
 1                          ; percent
 .4                      ; reduce .4  
 3,4                        ; age >55 (CELL 13-age,dbp,smok) [21]
@@ -500,8 +500,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016 [ok]
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0311537307457
-0.167251484344
+0.0401139573531
+-0.0862396369917
 1                          ; percent
 .2462                      ; reduce .2462
 3,4                        ; age >55 (CELL 13-age,dbp,smok) [22]
@@ -522,8 +522,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.15957278433
-0.235711847681
+-0.000477794389381
+0.296775504073
 1                          ; percent
 .4                      ; reduce .4
 3,4                        ; age >55 (CELL 14-age,dbp,hdl) [23]
@@ -544,8 +544,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL        [ok]
 1                          ; Yes 10 year risk threshold
--0.0563354582465
--0.108050707738
+0.0567759608143
+0.0862161738988
 1                          ; percent
 .2462                      ; reduce .2462
 3,4                        ; age >55 (CELL 14-age,dbp,hdl) [24]
@@ -566,8 +566,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.121229702927
--0.0173123954616
+-0.148063354899
+0.112608904799
 1                          ; percent
 .4                      ; reduce .4
 3,4                        ; age >55 (CELL 15-age,smok,hdl) [25]
@@ -588,8 +588,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold [ok]
-0.0684381765252
-0.302163725557
+0.21926135539
+-0.0707760111067
 1                          ; percent
 .2462                      ; reduce .2462
 3,4                        ; age >55 (CELL 15-age,smok,hdl) [26]
@@ -610,8 +610,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.15491701466
-0.540600445926
+0.0585862113443
+0.145942415501
 1                          ; percent
 .4                      ; reduce .4
 3,4                        ; age >55 (CELL 16-age,dbp) [27]
@@ -632,8 +632,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.267224370375
-0.333510527703
+0.103869524421
+-0.0413499131457
 1                          ; percent
 .2462                      ; reduce .2462
 3,4                        ; age >55 (CELL 16-age,dbp) [28]
@@ -654,8 +654,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.144074236781
-0.116355468608
+0.00752707120507
+0.0287152542849
 1                          ; percent
 .4                      ; reduce .4
 3,4                        ; age >55 (mistake?) (CELL 17-age,smok) [29]
@@ -676,8 +676,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0318215768484
-0.29612306812
+-0.0364793009986
+0.168734508299
 1                          ; percent
 .2462                      ; reduce .2462
 3,4                        ; age >55 (CELL 17-age,smok) [30]
@@ -698,8 +698,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0692227677898
--0.00521334370054
+-0.00699720516937
+-0.122400020618
 1                          ; percent
 .4                      ; reduce .4
 3,4                        ; age >55 (mistake?) (CELL 18-age,hdl) [31]
@@ -720,8 +720,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0722545151776
-0.00551112731137
+-0.0105865575629
+-0.000260065094006
 1                          ; percent [ok]
 .2462                     ; reduce .3147
 3,4                        ; age >55 (CELL 18-age,hdl) [32]
@@ -742,8 +742,8 @@ ATP3 with LDL checks for all persons 55-74
 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.1886666409
-0.0392722699177
+0.298265915898
+0.229263821122
 1                          ; percent
 .4                        ; reduce Low
 3,4                      ; age >55 (CELL 1-age,dbp,smok,hdl) [33]
@@ -764,8 +764,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.127089234042
-0.299133814827
+0.01536487723
+0.0973031920807
 1                          ; percent
 .2462                     ; reduce SWITCH
 3,4                      ; age >55 (CELL 1-age,dbp,smok,hdl) [ok] [34]
@@ -786,8 +786,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0870061086051
-0.184756682912
+0.152819119124
+0.50010844847
 1                          ; percent
 .4                      ; reduce .4  
 3,4                      ; age >55 (CELL 2-age,dbp,smok) [35]
@@ -808,8 +808,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.240035226106
-0.557740555723
+-0.00915917300569
+-0.0843455508921
 1                          ; percent
 .2462                     ; reduce .3147
 2,3,4                      ; age >45 (CELL 2-age,dbp,smok) [36]
@@ -830,8 +830,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.152198013311
-0.273876846093
+0.116929609735
+-0.0135684299745
 1                          ; percent
 .4                      ; reduce .4  
 2,3,4                      ; age >45 (CELL 3-age,dbp,hdl) [37]
@@ -852,8 +852,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.00424844970361
-0.157681101008
+0.170396933153
+0.16875488153
 1                          ; percent
 .2462                     ; reduce .3147
 2,3,4                      ; age >45 (CELL 3-age,dbp,hdl) [38]
@@ -874,8 +874,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.135235926453
-0.262416735729
+-0.175070776536
+0.19042647037
 1                          ; percent
 .4                      ; reduce .4  
 2,3,4                      ; age >45 (CELL 4-age,smok,hdl) [39]
@@ -896,8 +896,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.261282731985
-0.394452663505
+-0.0900143840806
+0.51220259144
 1                          ; percent
 .2462                     ; reduce .3147
 2,3,4                      ; age >45 (CELL 4-age,smok,hdl) [40]
@@ -918,8 +918,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.0651937729248
-0.628223209778
+0.27086143113
+0.0759982131545
 1                          ; percent
 .4                      ; reduce .4  
 2,3,4                      ; age >45 (CELL 5-age,dbp) [41]
@@ -940,8 +940,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0444751114349
-0.437908412475
+0.100383810243
+0.320289650634
 1                          ; percent
 .2462                     ; reduce .3147
 2,3,4                      ; age >45 (CELL 5-age,dbp) [42]
@@ -962,8 +962,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.0194751802297
-0.519278240492
+0.173349785408
+0.00382433856035
 1                          ; percent
 .4                      ; reduce .4  
 2,3,4                      ; age >45 (CELL 6-age,smok) [43]
@@ -984,8 +984,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0641332925295
-0.248143770097
+0.0566759092261
+-0.0711224798494
 1                          ; percent
 .2462                     ; reduce .3147
 2,3,4                      ; age >45 (CELL 6-age,smok) [44]
@@ -1006,8 +1006,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.0544163532306
-0.480265163661
+-0.0233902236668
+0.209023626922
 1                          ; percent
 .4                      ; reduce .4  
 2,3,4                      ; age >45 (CELL 7-age,hdl) [45]
@@ -1028,8 +1028,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.176713952952
-0.434597717425
+0.109844150392
+0.0364604804434
 1                          ; percent
 .2462                     ; reduce .3147
 2,3,4                      ; age >45 (CELL 7-age,hdl) [46]
@@ -1050,8 +1050,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016 [women]
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.118079338351
-0.306776715786
+0.167368613386
+0.07441031856
 1                          ; percent
 .4                        ; reduce Low
 3,4                        ; age >55 (CELL 12-age,dbp,smok,hdl) [47]
@@ -1072,8 +1072,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.100968417371
-0.433331808994
+0.0741356512416
+0.295303504303
 1                          ; percent
 .2462                      ; reduce SWITCH
 3,4                        ; age >55 (CELL 12-age,dbp,smok,hdl) [48]
@@ -1094,8 +1094,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0245886135897
-0.0457832175862
+0.0518011175783
+0.266710367926
 1                          ; percent
 .4                      ; reduce .4  
 3,4                        ; age >55 (CELL 13-age,dbp,smok) [49]
@@ -1116,8 +1116,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.10728711082
--0.0260537494555
+0.212411787776
+-0.103099710369
 1                          ; percent
 .2462                      ; reduce .2462
 3,4                        ; age >55 (CELL 13-age,dbp,smok) [50]
@@ -1138,8 +1138,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0142326603602
-0.255991747596
+0.104576691596
+-0.039555734141
 1                          ; percent
 .4                      ; reduce .4  
 3,4                        ; age >55 (CELL 14-age,dbp,hdl) [51]
@@ -1160,8 +1160,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.159417920804
-0.0616171015312
+0.0983854150778
+-0.105489809077
 1                          ; percent
 .2462                      ; reduce .2462
 3,4                        ; age >55 (CELL 14-age,dbp,hdl) [52]
@@ -1182,8 +1182,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0942933545382
-0.432337598654
+-0.0370001959365
+-0.028410882223
 1                          ; percent
 .4                      ; reduce .4  
 3,4                        ; age >55 (CELL 15-age,smok,hdl) [53]
@@ -1204,8 +1204,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0872597602574
-0.450340964493
+0.155501760856
+0.12010432372
 1                          ; percent
 .2462                      ; reduce .2462
 3,4                        ; age >55 (CELL 15-age,smok,hdl) [54]
@@ -1226,8 +1226,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.125207276352
-0.292670224932
+0.0514436128893
+0.230130999948
 1                          ; percent
 .4                      ; reduce .4
 3,4                        ; age >55 (CELL 16-age,dbp) [55]
@@ -1248,8 +1248,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.182438451544
-0.0350945607691
+0.0969722467369
+0.198256110166
 1                          ; percent
 .2462                     ; reduce .3147
 3,4                        ; age >55 (CELL 16-age,dbp) [56]
@@ -1270,8 +1270,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.184243528862
-0.0757095709161
+0.288092015203
+-0.00836663501547
 1                          ; percent
 .4                      ; reduce .4  
 3,4                        ; age >55 (mistake?) (CELL 17-age,smok) [57]
@@ -1292,8 +1292,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.22094610752
-0.178738987387
+0.043435303131
+0.361442157315
 1                          ; percent
 .2462                     ; reduce .3147
 3,4                        ; age >55 (CELL 17-age,smok) [58]
@@ -1314,8 +1314,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.0405149841077
-0.224447045491
+0.303528920209
+0.265340346476
 1                          ; percent
 .4                      ; reduce .4
 3,4                        ; age >55 (mistake?) (CELL 18-age,hdl) [59]
@@ -1336,8 +1336,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.108463419972
-0.160311950198
+0.0737607906193
+0.277968135769
 1                          ; percent
 .2462                      ; reduce .2462
 3,4                        ; age >55 (CELL 18-age,hdl) [60]
@@ -1358,8 +1358,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; yes 10 year risk threshold
--0.0907692168313
-0.201299937791
+0.0453719161821
+0.380830765348
 1                          ; percent
 .1                        ; reduce Quarter-Low
 5,6                      ; age >75 (CELL 3- M 1RF- age)----------
@@ -1380,8 +1380,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; yes 10 year risk threshold
--0.0306771303031
-0.128002937827
+0.0901750451787
+0.217178947075
 1                          ; percent
 .0369                      ; reduce Quarter-switch
 5,6                      ; age >75 (CELL 3- M 1RF- age)----------
@@ -1402,8 +1402,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; yes 10 year risk threshold
--0.154952201781
-0.527375308262
+-0.0253591911187
+0.16379472281
 1                          ; percent
 .1                      ; reduce Quarter-Low
 5,6                        ; age >75 (CELL 7- F 1RF- age)---------- 
@@ -1424,8 +1424,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; yes 10 year risk threshold
--0.00738213204372
--0.193986000827
+0.0988297656854
+0.0783367103553
 1                          ; percent
 .0369                      ; reduce Quarter-Switch
 5,6                        ; age >75 (CELL 7- F 1RF- age)----------
@@ -1446,8 +1446,8 @@ ATP3 with LDL checks for all persons 55-74
 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.0029999392803
--0.0237238127359
+0.0915715587706
+0.20538772071
 1                          ; percent
 .4                        ; reduce Low
 5,6                      ; age >75 (CELL 1-age,d.,lbp,smok,hdl) [gap?]
@@ -1468,8 +1468,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.0528075024624
--0.0594406673073
+0.0181170990845
+0.135612863491
 1                          ; percent
 .2462                     ; reduce SWITCH
 5,6                      ; age >75 (CELL 1-age,dbp,smok,hdl)
@@ -1490,8 +1490,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.0207222759131
--0.0416193798972
+0.116697993719
+0.0137729740704
 1                          ; percent
 .4                      ; reduce .4    
 5,6                      ; age >75 (CELL 2-age,dbp,smok) [7]
@@ -1512,8 +1512,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.100355178809
-0.0505129295415
+-0.0270509201732
+0.115096567238
 1                          ; percent
 .2462                     ; reduce .3147
 5,6                      ; age >75 (CELL 2-age,dbp,smok) [8]
@@ -1534,8 +1534,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.0335262099184
-0.376106848912
+0.0482651566493
+0.14282791673
 1                          ; percent
 .4                      ; reduce .4    
 5,6                      ; age >75 (CELL 3-age,dbp,hdl) [9]
@@ -1556,8 +1556,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.124215508867
-0.0664504084939
+-0.0433446415963
+0.143250157906
 1                          ; percent
 .2462                     ; reduce .3147
 5,6                      ; age >75 (CELL 3-age,dbp,hdl) [10]
@@ -1578,8 +1578,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.170407247806
-0.165430046913
+-0.124054451596
+-0.0237320010618
 1                          ; percent
 .4                      ; reduce .4    
 5,6                      ; age >75 (CELL 4-age,smok,hdl) [11]
@@ -1600,8 +1600,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.320769032438
-0.362981064121
+0.11065200176
+-0.0482614457425
 1                          ; percent
 .2462                     ; reduce .3147
 5,6                      ; age >75 (CELL 4-age,smok,hdl) [12]
@@ -1622,8 +1622,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0794787128379
-0.0923280643856
+-0.0942943251279
+0.339116176286
 1                          ; percent
 .4                      ; reduce .4  
 5,6                      ; age >75 (CELL 5-age,dbp) [13]
@@ -1644,8 +1644,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.116293538242
-0.31427638511
+0.0533981724662
+-0.000666390362722
 1                          ; percent
 .2462                     ; reduce .3147
 5,6                      ; age >75 (CELL 5-age,dbp) [14]
@@ -1666,8 +1666,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0910515371659
--0.076429697253
+0.0879718957671
+0.424736479101
 1                          ; percent
 .4                      ; reduce .4  
 5,6                      ; age >75 (CELL 6-age,smok) [15]
@@ -1688,8 +1688,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.21819340237
-0.411325050061
+0.000521740353767
+-0.072518521372
 1                          ; percent
 .2462                     ; reduce .3147
 5,6                      ; age >75 (CELL 6-age,smok) [16]
@@ -1710,8 +1710,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0592171844531
-0.288807270288
+0.0644287602783
+0.0419886221652
 1                          ; percent
 .4                      ; reduce .4  
 5,6                      ; age >75 (CELL 7-age,hdl) [17]
@@ -1732,8 +1732,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.0139191855594
--0.0454707868776
+-0.0087334321018
+0.175793877024
 1                          ; percent
 .2462                     ; reduce .3147
 5,6                      ; age >75 (CELL 7-age,hdl) [18]
@@ -1754,8 +1754,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0374287572566
--0.333482205321
+0.104064657718
+0.0821493639359
 1                          ; percent
 .4                        ; reduce Low
 5,6                        ; age >75 (CELL 12-age,dbp,smok,hdl) [19]
@@ -1776,8 +1776,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016 [ok]
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0151736169533
-0.345081631091
+-0.0434615796572
+0.0292636367822
 1                          ; percent
 .2462                     ; reduce SWITCH
 5,6                        ; age >75 (CELL 12-age,dbp,smok,hdl) [20]
@@ -1798,8 +1798,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0820303332178
-0.131779248208
+0.0350295812044
+-0.190190680226
 1                          ; percent
 .4                      ; reduce .4  
 5,6                        ; age >75 (CELL 13-age,dbp,smok) [21]
@@ -1820,8 +1820,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016 [ok]
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.129047498392
--0.201107413353
+0.0567485449849
+0.584782217056
 1                          ; percent
 .2462                      ; reduce .2462
 5,6                        ; age >75 (CELL 13-age,dbp,smok) [22]
@@ -1842,8 +1842,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.0737516512443
--0.102837333394
+0.089701952877
+0.0902677013946
 1                          ; percent
 .4                      ; reduce .4
 5,6                        ; age >75 (CELL 14-age,dbp,hdl) [23]
@@ -1864,8 +1864,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL        [ok]
 1                          ; Yes 10 year risk threshold
-0.078232033356
--0.245524386643
+-0.0985592711477
+0.105427400027
 1                          ; percent
 .2462                      ; reduce .2462
 5,6                        ; age >75 (CELL 14-age,dbp,hdl) [24]
@@ -1886,8 +1886,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.00844619406296
--0.350389900752
+-0.187871779354
+0.420782241505
 1                          ; percent
 .4                      ; reduce .4
 5,6                        ; age >75 (CELL 15-age,smok,hdl) [25]
@@ -1908,8 +1908,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold [ok]
-0.0255759632394
--0.0163767386492
+0.128774049577
+-0.0243338523479
 1                          ; percent
 .2462                      ; reduce .2462
 5,6                        ; age >75 (CELL 15-age,smok,hdl) [26]
@@ -1930,8 +1930,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0912943597406
-0.0813762449179
+0.114946359311
+0.101755810345
 1                          ; percent
 .4                      ; reduce .4
 5,6                        ; age >75 (CELL 16-age,dbp) [27]
@@ -1952,8 +1952,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.127001048554
-0.411821429123
+0.0365056614014
+-0.11087082199
 1                          ; percent
 .2462                      ; reduce .2462
 5,6                        ; age >75 (CELL 16-age,dbp) [28]
@@ -1974,8 +1974,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.00478266901027
-0.104177954983
+-0.0409318443925
+0.0248593133533
 1                          ; percent
 .4                      ; reduce .4
 5,6                        ; age >75 (mistake?) (CELL 17-age,smok) [29]
@@ -1996,8 +1996,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0758126755975
-0.162750444932
+-0.173659610069
+-0.124000501462
 1                          ; percent
 .2462                      ; reduce .2462
 5,6                        ; age >75 (CELL 17-age,smok) [30]
@@ -2018,8 +2018,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0633508672507
-0.231687016358
+-0.000528825729962
+0.00798609942782
 1                          ; percent
 .4                      ; reduce .4
 5,6                        ; age >75 (mistake?) (CELL 18-age,hdl) [31]
@@ -2040,8 +2040,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.0235045572377
--0.0208264894804
+-0.0416026366865
+0.172208226503
 1                          ; percent [ok]
 .2462                     ; reduce .3147
 5,6                        ; age >75 (CELL 18-age,hdl) [32]
@@ -2062,8 +2062,8 @@ ATP3 with LDL checks for all persons 55-74
 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0286810748564
-0.0794361686146
+0.0559666290098
+0.247823437275
 1                          ; percent
 .4                        ; reduce Low
 5,6                      ; age >75 (CELL 1-age,dbp,smok,hdl) [33]
@@ -2084,8 +2084,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.251033746346
--0.0816898362138
+0.186443218979
+0.285228102702
 1                          ; percent
 .2462                     ; reduce SWITCH
 5,6                      ; age >75 (CELL 1-age,dbp,smok,hdl) [ok] [34]
@@ -2106,8 +2106,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0324072738293
-0.20616079725
+0.166983396872
+0.270637436536
 1                          ; percent
 .4                      ; reduce .4  
 5,6                      ; age >75 (CELL 2-age,dbp,smok) [35]
@@ -2128,8 +2128,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.201726197938
-0.154100147429
+0.129617629391
+0.124005785139
 1                          ; percent
 .2462                     ; reduce .3147
 5,6                      ; age >75 (CELL 2-age,dbp,smok) [36]
@@ -2150,8 +2150,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.160724606812
-0.0476682255833
+-0.017107826644
+0.268417323187
 1                          ; percent
 .4                      ; reduce .4  
 5,6                      ; age >75 (CELL 3-age,dbp,hdl) [37]
@@ -2172,8 +2172,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.126616356665
-0.510603290884
+0.24296326648
+0.394530161995
 1                          ; percent
 .2462                     ; reduce .3147
 5,6                      ; age >75 (CELL 3-age,dbp,hdl) [38]
@@ -2194,8 +2194,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.00405190130638
-0.362197629816
+0.100089948669
+0.306799084008
 1                          ; percent
 .4                      ; reduce .4  
 5,6                      ; age >75 (CELL 4-age,smok,hdl) [39]
@@ -2216,8 +2216,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0186981390979
-0.483850087433
+0.0788021126508
+0.342083399559
 1                          ; percent
 .2462                     ; reduce .3147
 5,6                      ; age >75 (CELL 4-age,smok,hdl) [40]
@@ -2238,8 +2238,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.179163779287
-0.272141926182
+0.148435754373
+0.187763685538
 1                          ; percent
 .4                      ; reduce .4  
 5,6                      ; age >75 (CELL 5-age,dbp) [41]
@@ -2260,8 +2260,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0172509855433
-0.731433049615
+0.12610497818
+-0.0777144440005
 1                          ; percent
 .2462                     ; reduce .3147
 5,6                      ; age >75 (CELL 5-age,dbp) [42]
@@ -2282,8 +2282,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.148345682553
-0.197595280949
+-0.0221056145492
+0.40477778355
 1                          ; percent
 .4                      ; reduce .4  
 5,6                      ; age >75 (CELL 6-age,smok) [43]
@@ -2304,8 +2304,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0961047552699
-0.0605973280319
+0.120992198427
+0.0292062698096
 1                          ; percent
 .2462                     ; reduce .3147
 5,6                      ; age >75 (CELL 6-age,smok) [44]
@@ -2326,8 +2326,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0351486249349
-0.347629509268
+0.160665857404
+0.0882653141745
 1                          ; percent
 .4                      ; reduce .4  
 5,6                      ; age >75 (CELL 7-age,hdl) [45]
@@ -2348,8 +2348,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.099224633042
-0.190511372235
+0.115706617598
+0.254203024188
 1                          ; percent
 .2462                     ; reduce .3147
 5,6                      ; age >75 (CELL 7-age,hdl) [46]
@@ -2370,8 +2370,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016 [women]
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0406023881407
-0.363376008907
+0.163630443437
+0.535112074214
 1                          ; percent
 .4                        ; reduce Low
 5,6                        ; age >75 (CELL 12-age,dbp,smok,hdl) [47]
@@ -2392,8 +2392,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.183392444029
-0.0843753042035
+-0.0819601493218
+0.416871772935
 1                          ; percent
 .2462                      ; reduce SWITCH
 5,6                        ; age >75 (CELL 12-age,dbp,smok,hdl) [48]
@@ -2414,8 +2414,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0687263668004
-0.584872971033
+0.16072543016
+0.377527623252
 1                          ; percent
 .4                      ; reduce .4  
 5,6                        ; age >75 (CELL 13-age,dbp,smok) [49]
@@ -2436,8 +2436,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.120652759288
-0.109527658081
+-0.0638148092974
+0.27971649367
 1                          ; percent
 .2462                      ; reduce .2462
 5,6                        ; age >75 (CELL 13-age,dbp,smok) [50]
@@ -2458,8 +2458,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0499917217965
-0.399936649158
+0.157004336484
+0.470501193758
 1                          ; percent
 .4                      ; reduce .4  
 5,6                        ; age >75 (CELL 14-age,dbp,hdl) [51]
@@ -2480,8 +2480,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0614280446941
-0.383516691442
+0.0719664534655
+0.189670042711
 1                          ; percent
 .2462                      ; reduce .2462
 5,6                        ; age >75 (CELL 14-age,dbp,hdl) [52]
@@ -2502,8 +2502,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.00489797424941
-0.589997907252
+-0.0923329250321
+0.421731205617
 1                          ; percent
 .4                      ; reduce .4  
 5,6                        ; age >75 (CELL 15-age,smok,hdl) [53]
@@ -2524,8 +2524,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.034538078441
-0.118121960422
+0.0437986773566
+0.0357070960735
 1                          ; percent
 .2462                      ; reduce .2462
 5,6                        ; age >75 (CELL 15-age,smok,hdl) [54]
@@ -2546,8 +2546,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0284463742806
-0.296234448979
+0.359354581707
+0.368319293442
 1                          ; percent
 .4                      ; reduce .4
 5,6                        ; age >75 (CELL 16-age,dbp) [55]
@@ -2568,8 +2568,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.145028668041
-0.206562190503
+0.112555997782
+0.476176663009
 1                          ; percent
 .2462                     ; reduce .3147
 5,6                        ; age >75 (CELL 16-age,dbp) [56]
@@ -2590,8 +2590,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
--0.0732892785165
-0.253649702495
+0.105880229604
+-0.0404226079538
 1                          ; percent
 .4                      ; reduce .4  
 5,6                        ; age >75 (mistake?) (CELL 17-age,smok) [57]
@@ -2612,8 +2612,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.11259635694
-0.189183662191
+0.0490801182239
+0.203579573812
 1                          ; percent
 .2462                     ; reduce .3147
 5,6                        ; age >75 (CELL 17-age,smok) [58]
@@ -2634,8 +2634,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.132585634022
--0.15437244346
+0.244492779721
+0.556108114143
 1                          ; percent
 .4                      ; reduce .4
 5,6                        ; age >75 (mistake?) (CELL 18-age,hdl) [59]
@@ -2656,8 +2656,8 @@ ATP3 with LDL checks for all persons 55-74
 2016                       ; begin intervention 2016
 2                          ; LDL
 1                          ; Yes 10 year risk threshold
-0.0742633067703
-0.267651817196
+0.141056725664
+0.137897461903
 1                          ; percent
 .2462                      ; reduce .2462
 5,6                        ; age >75 (CELL 18-age,hdl) [60]
@@ -2678,8 +2678,8 @@ ATP3 with LDL checks for all persons 55-74
 2016
 2                          ; LDL DE >20 high
 1                          ; risk threshold = 20
-0.288618265624
-4.94210840795
+0.285055668098
+5.04884540057
 1                          ; percent
 0.5477                     ; reduce LDL 54.77 %
 3,4                        ; age 55-74   [61]
@@ -2700,8 +2700,8 @@ ATP3 with LDL checks for all persons 55-74
 2016
 2                          ; LDL DE >20 SWITCH 
 1                          ; yes 10 year risk threshold
-0.294443960822
-5.04347875561
+0.303943104299
+4.89202983794
 1                          ; percent
 0.2462                     ; reduce LDL .2462%
 3,4                        ; age 55-74 [62]
@@ -2722,8 +2722,8 @@ ATP3 with LDL checks for all persons 55-74
 2016
 2                          ; LDL DE >20 high
 1                          ; risk threshold = 20
-0.281335372313
-4.57949335577
+0.127305157305
+5.23523111329
 1                          ; percent
 0.5477                     ; reduce LDL 54.77 %
 2                          ; age 45-54 [63]
@@ -2744,8 +2744,8 @@ ATP3 with LDL checks for all persons 55-74
 2016
 2                          ; LDL DE >20 SWITCH 
 1                          ; yes 10 year risk threshold
-0.0365812909565
-4.76224484472
+0.388574360338
+4.93159252479
 1                          ; percent
 0.2462                     ; reduce LDL .2462%
 2                          ; age 45-54 [64]
@@ -2766,8 +2766,8 @@ ATP3 with LDL checks for all persons 55-74
 2016
 2                          ; LDL DE >20 high
 1                          ; risk threshold = 20
-0.0742004898467
-5.05182549018
+0.138237485583
+4.93693388816
 1                          ; percent
 0.5477                     ; reduce LDL 54.77 %
 5 6                        ; age 75-94   [61]
@@ -2788,8 +2788,8 @@ ATP3 with LDL checks for all persons 55-74
 2016
 2                          ; LDL DE >20 SWITCH 
 1                          ; yes 10 year risk threshold
-0.20777797597
-5.06110718963
+0.106649942492
+4.82159374529
 1                          ; percent
 0.2462                     ; reduce LDL .2462%
 5 6                        ; age 75-94 [62]

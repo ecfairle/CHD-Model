@@ -5,79 +5,79 @@
 
    Cost of initial 30 days with angina - $   
 
-   806.70         
+   8033.98        
 
    Cost of MI, survivors - $
 
-   7082.98        7082.98        7082.98        7167.30        7397.78        
+   9100.27        9100.27        9100.27        9208.61        9504.73        
 
    Cost of MI, fatalities - $
 
-   3060.83        3060.83        3060.83        3060.83        3060.83        
+   0.00           0.00           0.00           0.00           0.00           
 
    Cost of arrest, pre-hospital fatalities - $    
    
-   338.17         
+   886.80         
 
    Cost of arrest, survivors - $  
    
-   19045.34       
+   6409.81        
 
    Cost of arrest, hospital fatalities - $   
    
-   5015.72        
+   8864.74        
 
    Cost of hospitalization for CHF - $
 
-   0.00           0.00           0.00           0.00           0.00           
+   3455.39        3455.39        3455.39        3455.39        3455.39        
 
    Ratio of CHF admissions per old MI death, multiplied by fraction
    of CHF admissions attributable to CHD (0.5) -       
-   0.50           
+   0.79           
 
    Cost in first year with CHD, if no revasc. - $
 
-   2163.03        2163.03        2163.03        2163.03        2163.03        
+   5532.11        5532.11        5532.11        5532.11        5532.11        
 
    Cost in subsequent years with CHD, if no  revasc. - $
 
-   295.94         295.94         295.94         295.94         295.94         
+   2237.24        2237.24        2237.24        2237.24        2237.24        
 
    Cost in first year post-revasc. - $
 
-   2946.07        2946.07        2946.07        2946.07        2946.07        
+   0.00           0.00           0.00           0.00           0.00           
 
    Cost in subsequent years post-revasc. - $
 
-   2745.64        2745.64        2745.64        2745.64        2745.64        
+   733.63         733.63         733.63         733.63         733.63         
 
    Cost of CABG and Cath -  $
 
-   57844.27       57844.27       57844.27       58582.26       63642.76       
+   115642.61       115642.61       115642.61       117118.01       127234.98       
 
    Cost of PTCA and Cath - $
 
-   0.00           0.00           0.00           0.00           0.00           
+   29290.10       29290.10       29290.10       30502.69       36736.44       
 
    Cost of catheterization - $
 
-   10144.80       10144.80       10144.80       10913.75       14003.06       
+   3675.08        3675.08        3675.08        3953.65        5072.79        
 
    Proportion of old MI deaths occurring outside  of hospital -       
    
-   1.35           
+   0.55           
 
    Catheterizations per revascularization - 1+      
    
-   1.91           
+   3.43           
 
    Cost of MI, PTCA and catheterization (30 day) -  $
 
-   33102.22       33102.22       33102.22       33552.05       35761.51       
+   42195.37       42195.37       42195.37       42768.77       45585.17       
 
    Cost of MI, CABG and catheterization (30 day) -  $
         
-   73276.01       73276.01       73276.01       74304.76       80621.65       
+   64566.80       64566.80       64566.80       65473.28       71039.39       
 
 
 

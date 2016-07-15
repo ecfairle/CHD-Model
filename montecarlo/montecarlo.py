@@ -5,11 +5,12 @@ import numpy as np
 
 def main():
 	#Change these to change which files to simulate with
-	VaryInp('SBP1').vary()
+	VaryInp('1000').vary()
 	VaryDat("Bdia").vary()
 	VaryDat("Bstk",lines=2).vary()
 	VaryDat("B",lines=2).vary()
-	VaryDat("qol",5,"   %6.4f").vary()
+	#VaryDat("qol",5,"   %6.4f").vary()
+	VaryDat("incdia").vary()
 	#VaryCst("cstval").vary()
 
 
@@ -30,7 +31,7 @@ class Varier:
 		self.mc = open('modfile/' + fname + '_mc.dat','w')
 		self.save = open('modfile/' + 'MC' + fname + '.txt','a')
 		self.means = read_lines('modfile/' + fname + '_mc0.dat')
-		self.std = read_lines('modfile/' + fname + '_mc0.dat')
+		self.std = read_lines('modfile/' + fname + 'sd.dat')
 		self.spaces = spaces
 		self.lines = lines
 		self.format = format
@@ -115,7 +116,7 @@ class VaryInp:
 
 	def __init__(self, fname):
 		self.mc = open(fname + '_mc.inp','w')
-		self.rd = read_lines(fname + '.sdind')
+		self.rd = read_lines(fname + 'effect_mc.txt')
 		self.means = read_lines(fname + '_mc0.inp')
 		self.std = []
 		self._build_std()

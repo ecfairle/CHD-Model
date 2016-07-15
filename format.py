@@ -1,18 +1,14 @@
 #!/usr/bin/env python
+from __future__ import print_function
+
 import sys
 import os.path
 import re
 
+
 def main():
-	if len(sys.argv) < 2:
-		print("Input file name: e.g. 'format.py filename'")
-		sys.exit()
-
-	if not os.path.isfile(sys.argv[1] + ".out"):
-		print("Invalid File Name")
-		print("Execute by typing 'format.py filename'")
-		sys.exit()
-
+	checkInput()
+	
 	reform = Reformatter()
 	reform.format("NEW CHD CASES",2)
 	reform.format("CVD PREVALENCE - first of year",1,["Prevalence"])
@@ -69,6 +65,17 @@ def main():
 	reform.format("Total DH QALY",1,["Age/Sex Breakdown"],6)
 
 
+def checkInput():
+	if len(sys.argv) < 2:
+		print("Input file name: e.g. 'format.py filename'")
+		sys.exit()
+
+	if not os.path.isfile(sys.argv[1] + ".out"):
+		print("Invalid File Name")
+		print("Execute by typing 'format.py filename'")
+		sys.exit()
+
+
 class Reformatter(object):
 	"""Used to build formatted .frmt file from .out file
 
@@ -78,38 +85,13 @@ class Reformatter(object):
 		self.topline = ['M35-44', 'M45-54', 'M55-64', 'M65-74', 'M75-84', 'M85-94', 
 			'F35-44',  'F45-54',  'F55-64',   'F65-74',  'F75-84',  'F85-94']
 		self.outfile = open(sys.argv[1] + '.frmt','w')
-		self.lines_list = self.get_lines()
+		self.lines_list = self._get_lines()
 		self.base_year = int(self.lines_list[9])
 		self.topline_format = lambda categories: 'Year{:>12} ' + '{:>15} '*(12*categories-1)
 		self.num_format = lambda categories: '{}{:>12} ' + '{:>15} '*(12*categories-1)
 		self.category_format = lambda categories: '    {:>12}' + '{:>192}'*(categories-1)
 		self.max_lines_after = 15
-
-	def get_lines(self):
-		with open(sys.argv[1] + ".out", 'r') as myfile:
-			return myfile.readlines()
-
-	def find_title(self, line, title):
-		return (line.find(title + "     ") != -1 or 
-			line.find(title + "\n") != -1 and 
-			line.find("Acute " + title) == -1)
-
-	def full_topline(self, categories):
-		topline_full = []
-		for i in range(categories):
-			topline_full += self.topline
-		return topline_full
-
-	def write_topline(self, title, categories, ctg_list):
-		print>>self.outfile, title
-		if ctg_list:
-			full_cat_format = self.category_format(categories)
-			print>>self.outfile, full_cat_format.format(*ctg_list)
-
-		topline_full = self.full_topline(categories)
-		full_top_format = self.topline_format(categories)
-		print>>self.outfile, full_top_format.format(*topline_full)
-
+	
 	def format(self, title, categories, ctg_list=[], linesdown=0):
 		""" Reformats sections with particular label
 
@@ -121,41 +103,70 @@ class Reformatter(object):
 			(only used if it doesn't make sense to find next line starting with numbers)
 		"""
 		
-		self.write_topline(title,categories,ctg_list)
-		self.format_blocks(categories,linesdown,title)  
+		self._write_topline(title,categories,ctg_list)
+		self._format_blocks(categories,linesdown,title)  
 
-	def format_blocks(self, categories, linesdown, title):
+	def _get_lines(self):
+		with open(sys.argv[1] + ".out", 'r') as myfile:
+			return myfile.readlines()
+
+	def _find_title(self, line, title):
+		return (line.find(title + "     ") != -1 or 
+			line.find(title + "\n") != -1 and 
+			line.find("Acute " + title) == -1)
+
+	def _find_topline(self, categories):
+		topline_full = []
+		for i in range(categories):
+			topline_full += self.topline
+		return topline_full
+
+	def file_write(self, string):
+		print(string,file=self.outfile)
+
+	def _write_topline(self, title, categories, ctg_list):
+		self.file_write(title)
+		if ctg_list:
+			full_cat_format = self.category_format(categories)
+			self.file_write(full_cat_format.format(*ctg_list))
+
+		topline_full = self._find_topline(categories)
+		full_top_format = self.topline_format(categories)
+		self.file_write(full_top_format.format(*topline_full))
+
+	def _format_blocks(self, categories, linesdown, title):
 		cur_year = 0
 		for line_num,line in enumerate(self.lines_list):
-			if self.find_title(line,title):
-				self.format_block(line_num,cur_year,categories, linesdown)
+			if self._find_title(line,title):
+				self._format_block(line_num,cur_year,categories, linesdown)
 				cur_year+=1
-		print>>self.outfile, "\n",	
+		self.file_write("\n")	
 
-	def format_block(self, line_num, cur_year, categories, linesdown):
-		start_line = linesdown + line_num if linesdown!=0 else self.next_num_line(line_num)
-		num_list = self.get_number_list(start_line,categories)
-		self.format_num_line(categories,num_list,cur_year)
+	def _format_block(self, line_num, cur_year, categories, linesdown):
+		start_line = linesdown + line_num if linesdown!=0 else self._next_num_line(line_num)
+		num_list = self._get_number_list(start_line,categories)
+		self._format_num_line(categories,num_list,cur_year)
 
-	def format_num_line(self, categories,num_list,cur_year):
+	def _format_num_line(self, categories,num_list,cur_year):
 		full_format = self.num_format(categories)
-		print>>self.outfile, full_format.format(self.base_year + cur_year,*num_list)
+		self.file_write(full_format.format(self.base_year + cur_year,*num_list))
 
-	def get_number_list(self, start_line, categories):
+	def _get_number_list(self, start_line, categories):
 		num_list = []
-		self.replace_bad_chars(start_line)
+		self._replace_bad_chars(start_line)
 		for i in range(6):
-			num_list += [num for num in self.lines_list[i + start_line].split()]
-		return self.reorder_list(num_list,categories)
+			split_line = self.lines_list[i + start_line].split()
+			num_list += [num for num in split_line]
+		return self._reorder_list(num_list,categories)
 
-	def reorder_list(self, num_list, categories):
+	def _reorder_list(self, num_list, categories):
 		reordered = []
 		for i in range(categories*2):
 			for j in range(6):
 				reordered.append(num_list[i + (categories*2 + 1)*j + 1])
 		return reordered
 
-	def replace_bad_chars(self, start_line):
+	def _replace_bad_chars(self, start_line):
 		for i in range(start_line, start_line + 6):
 			self.lines_list[i] = self.lines_list[i].replace('. ', '') 
 			self.lines_list[i] = self.lines_list[i].replace('.\n','')
@@ -163,7 +174,7 @@ class Reformatter(object):
 			self.lines_list[i] = re.sub(r'[0-9]*./ \s*[0-9]*','',
 												self.lines_list[i])
 
-	def next_num_line(self, line_num):
+	def _next_num_line(self, line_num):
 		for i in range(self.max_lines_after):
 			if len(self.lines_list[i + line_num].split()) == 0:
 				continue
