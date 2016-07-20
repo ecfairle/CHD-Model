@@ -9,7 +9,8 @@ import re
 def main():
 	checkInput()
 	
-	reform = Reformatter()
+	reform = Reformatter(sys.argv[1] + '.frmt')
+	
 	reform.format("NEW CHD CASES",2)
 	reform.format("CVD PREVALENCE - first of year",1,["Prevalence"])
 	reform.format("NEW INTERVENED CHD CASES",2)
@@ -81,10 +82,10 @@ class Reformatter(object):
 
 	"""
 
-	def __init__(self):
+	def __init__(self,outfile_name):
 		self.topline = ['M35-44', 'M45-54', 'M55-64', 'M65-74', 'M75-84', 'M85-94', 
 			'F35-44',  'F45-54',  'F55-64',   'F65-74',  'F75-84',  'F85-94']
-		self.outfile = open(sys.argv[1] + '.frmt','w')
+		self.outfile = open(outfile_name,'w')
 		self.lines_list = self._get_lines()
 		self.base_year = int(self.lines_list[9])
 		self.topline_format = lambda categories: 'Year{:>12} ' + '{:>15} '*(12*categories-1)

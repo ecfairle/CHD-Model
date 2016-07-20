@@ -84,7 +84,8 @@ class VaryDat(Varier):
 
 
 	def _dist(self, mean, std):
-		rnd_out = [float(x[0])+self.rnd[(self.n_line/6)%2,i]*float(x[1]) for i,
+		block_num = int((self.n_line/6)%2)
+		rnd_out = [float(x[0])+self.rnd[block_num,i]*float(x[1]) for i,
 						x in enumerate(zip(mean[1:],std[1:]))]
 
 		if self.n_line/6 < self.lines and self.n_line%6 == 0:
