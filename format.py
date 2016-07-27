@@ -78,20 +78,18 @@ def checkInput():
 
 
 class Reformatter(object):
-	"""Used to build formatted .frmt file from .out file
+	"""Used to build formatted file from .out file
 
 	"""
 
 	def __init__(self,outfile_name):
 		self.topline = ['M35-44', 'M45-54', 'M55-64', 'M65-74', 'M75-84', 'M85-94', 
 			'F35-44',  'F45-54',  'F55-64',   'F65-74',  'F75-84',  'F85-94']
-		self.outfile = open(outfile_name,'w')
-		self.lines_list = self._get_lines()
-		self.base_year = int(self.lines_list[9])
+		self.formatted_file = open(outfile_name,'w')
+		self.outfile = CVDOutfile(outfile_name)
 		self.topline_format = lambda categories: 'Year{:>12} ' + '{:>15} '*(12*categories-1)
 		self.num_format = lambda categories: '{}{:>12} ' + '{:>15} '*(12*categories-1)
 		self.category_format = lambda categories: '    {:>12}' + '{:>192}'*(categories-1)
-		self.max_lines_after = 15
 	
 	def format(self, title, categories, ctg_list=[], linesdown=0):
 		""" Reformats sections with particular label
@@ -107,82 +105,108 @@ class Reformatter(object):
 		self._write_topline(title,categories,ctg_list)
 		self._format_blocks(categories,linesdown,title)  
 
-	def _get_lines(self):
-		with open(sys.argv[1] + ".out", 'r') as myfile:
-			return myfile.readlines()
+	def _write_topline(self, title, categories, ctg_list):
+		self._file_write(title)
+		if ctg_list:
+			full_cat_format = self.category_format(categories)
+			self._file_write(full_cat_format.format(*ctg_list))
 
-	def _find_title(self, line, title):
-		return (line.find(title + "     ") != -1 or 
-			line.find(title + "\n") != -1 and 
-			line.find("Acute " + title) == -1)
+		topline_full = self._make_topline(categories)
+		full_top_format = self.topline_format(categories)
+		self._file_write(full_top_format.format(*topline_full))
 
-	def _find_topline(self, categories):
+	def _make_topline(self, categories):
 		topline_full = []
 		for i in range(categories):
 			topline_full += self.topline
 		return topline_full
 
-	def file_write(self, string):
-		print(string,file=self.outfile)
-
-	def _write_topline(self, title, categories, ctg_list):
-		self.file_write(title)
-		if ctg_list:
-			full_cat_format = self.category_format(categories)
-			self.file_write(full_cat_format.format(*ctg_list))
-
-		topline_full = self._find_topline(categories)
-		full_top_format = self.topline_format(categories)
-		self.file_write(full_top_format.format(*topline_full))
+	def _file_write(self, string):
+		print(string,file=self.formatted_file)
 
 	def _format_blocks(self, categories, linesdown, title):
 		cur_year = 0
-		for line_num,line in enumerate(self.lines_list):
-			if self._find_title(line,title):
+		for line_num in range(self.outfile.num_lines):
+			if self.outfile.find_title(line_num,title):
 				self._format_block(line_num,cur_year,categories, linesdown)
 				cur_year+=1
-		self.file_write("\n")	
+		self._file_write("\n")	
 
 	def _format_block(self, line_num, cur_year, categories, linesdown):
-		start_line = linesdown + line_num if linesdown!=0 else self._next_num_line(line_num)
-		num_list = self._get_number_list(start_line,categories)
+		start_line = (linesdown + line_num if linesdown!=0 else 
+								self.outfile.next_num_line(line_num))
+		num_list = self.outfile.get_number_list(start_line,categories)
 		self._format_num_line(categories,num_list,cur_year)
 
 	def _format_num_line(self, categories,num_list,cur_year):
 		full_format = self.num_format(categories)
-		self.file_write(full_format.format(self.base_year + cur_year,*num_list))
+		self._file_write(full_format.format(self.outfile.base_year + cur_year,*num_list))
 
-	def _get_number_list(self, start_line, categories):
-		num_list = []
-		self._replace_bad_chars(start_line)
-		for i in range(6):
-			split_line = self.lines_list[i + start_line].split()
-			num_list += [num for num in split_line]
-		return self._reorder_list(num_list,categories)
 
-	def _reorder_list(self, num_list, categories):
-		reordered = []
-		for i in range(categories*2):
-			for j in range(6):
-				reordered.append(num_list[i + (categories*2 + 1)*j + 1])
-		return reordered
+class CVDOutfile:
+
+	def __init__(self,filename):
+		self.lines_list = self._get_lines()
+		self.base_year = int(self.lines_list[9])
+		self.max_lines_after = 15
+		self.num_lines = len(self.lines_list)
+
+	def _get_lines(self):
+		with open(sys.argv[1] + ".out", 'r') as myfile:
+			return myfile.readlines()
+
+	def find_title(self, line_num, title):
+		return (self.lines_list[line_num].find(title + "     ") != -1 or 
+			self.lines_list[line_num].find(title + "\n") != -1 and 
+			self.lines_list[line_num].find("Acute " + title) == -1)
 
 	def _replace_bad_chars(self, start_line):
+		#Fix section of numbers
 		for i in range(start_line, start_line + 6):
 			self.lines_list[i] = self.lines_list[i].replace('. ', '') 
 			self.lines_list[i] = self.lines_list[i].replace('.\n','')
 			#this is for CVD prevalence -- don't want 'x/y' just want rate
 			self.lines_list[i] = re.sub(r'[0-9]*./ \s*[0-9]*','',
 												self.lines_list[i])
-
-	def _next_num_line(self, line_num):
+ 
+	def next_num_line(self, line_num):
 		for i in range(self.max_lines_after):
-			if len(self.lines_list[i + line_num].split()) == 0:
-				continue
-			first_num = self.lines_list[i + line_num].split()[0][0]
-			if str.isdigit(first_num):
-				return i + line_num
+			line_length = len(self.lines_list[i + line_num].split())
+			if line_length > 0:
+				first_char = self.lines_list[i + line_num].split()[0][0]
+				if str.isdigit(first_char):
+					return i + line_num
 		return -1
+
+	def get_number_list(self, start_line, categories):
+		self._replace_bad_chars(start_line)
+		block = NumBlock(self.lines_list[start_line:start_line+6],categories)
+		return block.get_list()
+
+	def get_line(self,line_num):
+		return self.lines_list[line_num]
+
+
+class NumBlock:
+	def __init__(self,lines,categories):
+		self.num_list=[]
+		self._parse_block(lines)
+		self._reorder_block(self.num_list,categories)
+
+	def _reorder_block(self, num_list, categories):
+		reordered = []
+		for i in range(categories*2):
+			for j in range(6):
+				reordered.append(num_list[i + (categories*2 + 1)*j + 1])
+		self.num_list = reordered
+
+	def _parse_block(self,lines):
+		for i in range(6):
+			split_line = lines[i].split()
+			self.num_list += [num for num in split_line]
+
+	def get_list(self):
+		return self.num_list
 
 
 if __name__ == '__main__':
