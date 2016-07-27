@@ -215,14 +215,14 @@ class NumBlock:
 	def __init__(self,lines,categories):
 		self.num_list=[]
 		self._parse_block(lines)
-		self._reorder_block(self.num_list,categories)
+		self._reorder_block(categories)
 
-	def _reorder_block(self, num_list, categories):
+	def _reorder_block(self, categories):
 		"""Puts block in desired order for printing"""
 		reordered = []
 		for i in range(categories*2):
 			for j in range(6):
-				reordered.append(num_list[i + (categories*2 + 1)*j + 1])
+				reordered.append(self.num_list[i + (categories*2 + 1)*j + 1])
 		self.num_list = reordered
 
 	def _parse_block(self,lines):
