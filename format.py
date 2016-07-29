@@ -49,16 +49,16 @@ def main():
 	reformatter.format(TitleGroup("Non-CVD Death (DH)",3))
 
 	DE_group = TitleGroup("Total Pop (DE)",1)
-	DH_group = TitleGroup("Total Pop (DH 11-17)",1)
+	DH_group = TitleGroup("Total Pop (DH 1-10)",1)
 	reformatter.format(DE_group)
 	reformatter.format(DH_group)
 
-	Total_group = TitleGroup("Total Pop -- DE + (DH 11-17)",1)
+	Total_group = TitleGroup("Total Pop -- DE + (DH 1-10)",1)
 	Total_group.set_lines(DE_group)
 	Total_group.add_lines(DH_group)
 	Total_group.print_block(formatted_file)
 
-	reformatter.format(TitleGroup("Total Pop (DH 1-10)",1))
+	reformatter.format(TitleGroup("Total Pop (DH 11-17)",1))
 	reformatter.format(TitleGroup("Total DE Diabetes Pop",1))
 	reformatter.format(TitleGroup("NEW DIABETES CASES",2))
 	reformatter.format(TitleGroup("Total DE Heart Failure Pop",1))
@@ -129,9 +129,9 @@ class TitleGroup(object):
 		self.categories = categories
 		self.ctg_list = ctg_list
 		self.linesdown = linesdown
-		self.topline_format = 'Year{:>12} ' + '{:>15} '*(12*categories-1)
-		self.num_format = '{}{:>12} ' + '{:>15} '*(12*categories-1)
-		self.category_format = '    {:>12}' + '{:>192}'*(categories-1)
+		self.topline_format = 'Year     ' + '{:<18} '*(12*categories)
+		self.num_format = '{}     ' + '{:<18} '*(12*categories)
+		self.category_format = '         ' + '{:<228}'*categories
 		self.year_offset = 0
 		self.lines = [title]
 
@@ -145,7 +145,7 @@ class TitleGroup(object):
 			if str.isdigit(split_line[0][0]):
 				nums1 = split_line[1:]
 				nums2 = self.lines[line_num].split()[1:]
-				sums = [float(a)+float(b) for a,b in zip(nums1,nums2)]
+				sums = [int(a)+int(b) for a,b in zip(nums1,nums2)]
 				sum_line = [split_line[0]] + sums
 				self.lines[line_num] = self.num_format.format(*sum_line)
 
@@ -300,7 +300,7 @@ class NumBlock(object):
 		for line in lines:
 			split_line = line.split()
 			#ignore age range
-			self.num_list += [float(num) for num in split_line[1:]]
+			self.num_list += [num for num in split_line[1:]]
 
 	def reorder_block(self,columns,rows):
 		"""Puts block in desired order for printing"""
@@ -309,9 +309,6 @@ class NumBlock(object):
 			for j in range(rows):
 				reordered.append(self.num_list[i + columns*j])
 		self.num_list = reordered
-
-	def add_block(block):
-		self.num_list = [n + m for n,m in zip(self.num_list,block.num_list)]
 
 	def get_list(self):
 		return self.num_list
