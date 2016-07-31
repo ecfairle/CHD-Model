@@ -5,20 +5,6 @@ import sys
 import os.path
 import re
 
-#Line of .outfile to look for base year
-BASE_YEAR_LINE = 9 
-
-
-#Max lines after a title to look for 
-#a block of values (excluding when specified)
-MAX_LINES_AFTER = 15 
-
-#List of age/sex groups for each category
-TOP_LINE = ['M35-44', 'M45-54', 'M55-64', 'M65-74', 'M75-84', 'M85-94', 
-	'F35-44',  'F45-54',  'F55-64',   'F65-74',  'F75-84',  'F85-94']
-
-#Number of age ranges considered
-AGE_RANGES = 6
 
 def main():
 	validateInput()
@@ -101,12 +87,12 @@ def main():
 
 def validateInput():
 	if len(sys.argv) < 2:
-		print("Input file name: e.g. 'format.py [filename]'")
+		print("Input file name: e.g. 'format.py filename'")
 		sys.exit()
 
 	if not os.path.isfile(sys.argv[1] + ".out"):
 		print("Invalid File Name")
-		print("Execute by typing 'format.py [filename]'")
+		print("Execute by typing 'format.py filename'")
 		sys.exit()
 
 
@@ -123,6 +109,9 @@ class TitleGroup(object):
 			e.g. "CVD POPULATION DISTRIBUTION BY STATE"
 		lines: List of formatted lines for group
 	"""
+
+	top_line= ['M35-44', 'M45-54', 'M55-64', 'M65-74', 'M75-84', 'M85-94', 
+	'F35-44',  'F45-54',  'F55-64',   'F65-74',  'F75-84',  'F85-94']
 
 	def __init__(self, title, categories, ctg_list=[], linesdown=0):
 		self.title = title
@@ -149,9 +138,6 @@ class TitleGroup(object):
 				sum_line = [split_line[0]] + sums
 				self.lines[line_num] = self.num_format.format(*sum_line)
 
-	def increment_year(self):
-		self.year_offset = self.year_offset + 1
-
 	def append_line(self,str):
 		self.lines.append(str)
 
@@ -167,12 +153,13 @@ class TitleGroup(object):
 	def format_num_line(self,base_year,num_list):
 		format_str = self.num_format
 		cur_year = base_year + self.year_offset
+		self.year_offset = self.year_offset + 1
 		return format_str.format(cur_year,*num_list)
 
 	def _make_topline(self):
 		topline_full = []
 		for i in range(self.categories):
-			topline_full += TOP_LINE
+			topline_full += self.top_line
 		return topline_full
 
 	def write_header(self):
@@ -209,19 +196,20 @@ class Reformatter(object):
 		"""
 		
 		title_group.write_header()
-		self._format_blocks(title_group)  
+		self._format_blocks(title_group)
+		title_group.print_block(self.formatted_file)  
 
 	def _format_blocks(self,title_group):
 		for line_num in range(self.outfile.num_lines):
 			if self.outfile.find_title(line_num,title_group.title):
-				self._format_block(line_num,title_group)
-				title_group.increment_year()
-
-		title_group.print_block(self.formatted_file)	
+				self._format_block(line_num,title_group)		
 
 	def _format_block(self,line_num,title_group):
 		base_year = self.outfile.base_year
 		start_line = self._next_block(title_group,line_num)
+		match = re.split(r'(\s\s+)',self.outfile.lines_list[start_line-2].rstrip())
+		titles = [m for m in match if len(m)>0 and m[0]!=' ']
+		print(titles)
 		num_list = self.outfile.get_block(start_line,title_group.categories)
 		format_nums = title_group.format_num_line(base_year,num_list)
 		title_group.append_line(format_nums)
@@ -235,14 +223,21 @@ class CVDOutfile(object):
 	"""Contains information of .out file
 
 	Attr:
+		base_year_line: Integer ine of .outfile to look for base year
+		age_ranges: Integer number of age ranges considered
+		max_lines_after: Integer number of lines to search for block
+			of numbers after finding a title
 		lines_list: List of lines in .out file
 		base_year: Integer first year of simulation
 		num_lines: Integer number of lines in lines_list
 	"""
+	base_year_line = 9
+	age_ranges = 6
+	max_lines_after = 15 
 
 	def __init__(self,filename):
 		self.lines_list = self._get_lines(filename)
-		self.base_year = int(self.lines_list[BASE_YEAR_LINE])
+		self.base_year = int(self.lines_list[self.base_year_line])
 		self.num_lines = len(self.lines_list)
 
 	def _get_lines(self,filename):
@@ -265,7 +260,7 @@ class CVDOutfile(object):
 
 	def next_num_line(self, line_num):
 		"""Find next line containing numbers after line line_num"""
-		for i in range(MAX_LINES_AFTER):
+		for i in range(self.max_lines_after):
 			line_length = len(self.lines_list[i + line_num].split())
 			if line_length > 0:
 				first_char = self.lines_list[i + line_num].split()[0][0]
@@ -278,7 +273,7 @@ class CVDOutfile(object):
 		self._replace_bad_chars(start_line)
 		block_lines = self.lines_list[start_line:start_line+6]
 		block = NumBlock(block_lines)
-		block.reorder_block(categories*2,AGE_RANGES)
+		block.reorder_block(categories*2,self.age_ranges)
 		return block.get_list()
 
 	def get_line(self,line_num):

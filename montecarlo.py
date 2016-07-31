@@ -82,9 +82,12 @@ class VFile(object):
 	def vary_line(self,line):
 		pass
 
-	def format_line(self,out_list,line_num):
-		formatted = self.frmt_str.format(*out_list)
-		self.lines[line_num] = formatted
+	def format_line(self,out_list):
+		line_format = self.lead_spaces*' ' + len(out_list)*self.frmt_str
+		return line_format.format(*out_list)
+
+	def replace_line(self,line,line_num):
+		self.lines[line_num] = line
 
 
 class DatFile(VFile):
@@ -99,6 +102,7 @@ class DatFile(VFile):
 		VFile.__init__(self,fpath)
 		self.sdfile = SDFile(fname,self.zero_run)
 		self.frmt_str = ''
+		self.lead_spaces = 0
 		self.set_format(fname)
 
 	def vary_line(self,line_num):
@@ -107,7 +111,8 @@ class DatFile(VFile):
 			sds = self.sdfile.sd_list(line_num)
 			means = [float(mean) for mean in means[1:]]
 			varied = [float(m + sd) for m,sd in zip(means,sds)]
-			self.format_line(varied,line_num)
+			formatted = self.format_line(varied)
+			self.replace_line(formatted,line_num)
 
 	def set_format(self,fname):
 		"""Set frmt_str based on input/inputchk/{fname}.def"""
@@ -123,12 +128,10 @@ class DatFile(VFile):
 	def _parse_format(self,frmt_line):
 		"""Parse formatting information from .def file"""
 		spaces = re.findall(r'(\d+)x',frmt_line)
-		lead_spaces,num_spaces = [int(x) for x in spaces]
+		self.lead_spaces,num_spaces = [int(x) for x in spaces[:2]]
 		num_format = re.findall(r'f([0-9.]+)',frmt_line)[0]
-		cols_matchobj = re.search(r'(\d+)\(',frmt_line)
-		cols = int(cols_matchobj.group(1))
-		return (' '*lead_spaces + ('{{:<{0}f}}'.format(num_format) 
-				+ ' '*int(num_spaces))*cols)
+		return ('{{:<{0}f}}'.format(num_format) 
+				+ ' '*int(num_spaces))
 
 
 class SDFile(object):
@@ -137,10 +140,11 @@ class SDFile(object):
 	same format as .dat file
 	Attr:
 		lines: Raw lines in file
-		block_nums: List of block numbers for each data line
+		block_nums: List of block indices for each data line
 		num_blocks: Integer number of blocks in file
 		rnd: List of normally distributed random variables for each sd
 	"""
+
 	def __init__(self,fname,zero_run=False):
 		sdpath = os.path.join('modfile',fname + 'sd.dat')
 		self.lines = read_lines(sdpath)
@@ -190,6 +194,7 @@ class InpFile(VFile):
 		VFile.__init__(self,fname + '.inp')
 		self.effects = Effects(self.zero_run)
 		self.frmt_str = '{:<8.6f}'
+		self.lead_spaces = 0
 
 	def vary_line(self,line_num):
 		line = self.lines[line_num]
@@ -197,7 +202,8 @@ class InpFile(VFile):
 		if sd!=None:
 			mean = float(line.split()[0])
 			varied = mean + sd*mean
-			self.format_line([varied],line_num)
+			formatted = self.format_line([varied])
+			self.replace_line(formatted,line_num)
 
 
 class Effects(object):
