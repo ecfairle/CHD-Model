@@ -7,15 +7,24 @@ import os.path
 import re
 import sys
 
+"""
+Assumptions: 
+1- dat files to be varied listed in datfiles.txt
+
+2- last line of _mc0 file of dat files contains format string
+of form 'FORMAT:(14x (f9.6,3x))' where 14 is the number of leading
+spaces, 9 is the max number of slots to allow for the number, 6 is 
+the max number of digits to show past the decimal point.
+"""
 
 def main():
 	args = parse_args()
 	inp_files = parse_list(args.inpfiles)
-	beta_files = read_lines('betafiles.txt')
+	dat_files = read_lines('datfiles.txt')
 
 	VFile.zero_run = args.zero_run
 
-	for fname in beta_files:
+	for fname in dat_files:
 		datfile = DatFile(fname)
 		datfile.vary()
 		datfile.print_mc()
@@ -121,15 +130,13 @@ class DatFile(VFile):
 
 	def _lines_format(self,fname):
 		"""Return line from .def file containing format information"""
-		defpath = os.path.join('input','inputchk',fname + '.def')
-		with open(defpath,'r') as f:
-			return f.readlines()[-1]
+		return self.lines[-1]
 
-	def _parse_format(self,frmt_line):
+	def _parse_format(self,string):
 		"""Parse formatting information from .def file"""
-		spaces = re.findall(r'(\d+)x',frmt_line)
+		spaces = re.findall(r'(\d+)x',string)
 		self.lead_spaces,num_spaces = [int(x) for x in spaces[:2]]
-		num_format = re.findall(r'f([0-9.]+)',frmt_line)[0]
+		num_format = re.findall(r'f([0-9.]+)',string)[0]
 		return ('{{:<{0}f}}'.format(num_format) 
 				+ ' '*int(num_spaces))
 
