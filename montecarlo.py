@@ -17,18 +17,18 @@ spaces, 9 is the max number of slots to allow for the number, 6 is
 the max number of digits to show past the decimal point.
 """
 
+
 def main():
 	args = parse_args()
-	inp_files = parse_list(args.inpfiles)
-	dat_files = read_lines('datfiles.txt')
-
 	VFile.zero_run = args.zero_run
 
+	dat_files = read_lines('datfiles.txt')
 	for fname in dat_files:
 		datfile = DatFile(fname)
 		datfile.vary()
 		datfile.print_mc()
 
+	inp_files = parse_list(args.inpfiles)
 	for fname in inp_files:
 		inpfile = InpFile(fname)
 		inpfile.vary()
@@ -57,6 +57,26 @@ def read_lines(fname):
 
 def is_data_line(line):
 	return len(line) > 0 and str.isdigit(line[0][0])
+
+
+class Dist(object):
+	
+	def __init__(self,dist_name):
+		self.name = ''
+		self.fn = None
+		self.get_dist(dist_name)
+
+	def get_dist(self,dist_name):
+		dist_name = dist_name.strip().lower()
+		if dist_name == 'norm' or dist_name == 'normal':
+			self.name = 'NORMAL'
+			self.fn = np.random.randn
+		elif dist_name == 'lognormal':
+			self.name = 'LOGNORMAL'
+			self.fn = np.random.lognormal
+		elif dist_name == 'beta':
+			self.name = 'BETA'
+			self.fn = np.random.beta
 
 
 class VFile(object):

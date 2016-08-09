@@ -67,7 +67,6 @@ def main():
 	reformatter.format(TitleGroup("Bridge MI",1))
 	reformatter.format(TitleGroup("DH First MI (1,2,14)",1))
 	reformatter.format(TitleGroup("First MI",1))
-	reformatter.format(TitleGroup("Total MI",1))
 	reformatter.format(TitleGroup("DH 2nd MI (11,12,15, and dhxevt)",1))
 	reformatter.format(TitleGroup("DH Re-MI (3-8,11-13,15)",1))
 	reformatter.format(TitleGroup("DH MI Stroke (9,10,16,17)",1))
