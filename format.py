@@ -25,7 +25,8 @@ SECTIONS = [["NEW CHD CASES"],
 			["Non-CVD Death (DH)"],
 			["Total Pop (DE)"],
 			["Total Pop (DH 1-10)"],
-			['+',"Total Pop -- DE + (DH 1-10)","Total Pop (DE)","Total Pop (DH 1-10)"],
+			['+',"Total Pop -- DE + (DH 1-10)",
+						"Total Pop (DE)","Total Pop (DH 1-10)"],
 			["Total Pop (DH 11-17)"],
 			["Total DE Diabetes Pop"],
 			["NEW HEART FAILURE CASES"],
@@ -81,7 +82,7 @@ def add_sections(reformatter,title,*add_titles):
 
 	section = first_section
 	section.title = title
-	
+
 	for cur_title in add_titles[1:]:
 		cur_section = TrackedSection(cur_title)
 		reformatter.format(cur_section)
@@ -182,11 +183,14 @@ class OutputHeader(object):
 		self.topline_format = 'Year     ' + '{:<18} '*(12*self.num_categories)
 
 	def _parse_categories(self,category_line):
+		#categories separated by at least 2 whitespace characters
 		match = re.split(r'(\s\s+)',category_line.rstrip())
+		#filter out categories that are empty or only whitespace
 		categories = [m for m in match if len(m)>0 and m[0]!=' ']
+
 		if categories:
 			return categories
-		else:
+		else:  #default category
 			return ['Age/Sex Breakdown']
 
 	def get_categories(self):
