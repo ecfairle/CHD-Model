@@ -84,6 +84,29 @@ def main():
 	reformatter.format(TitleGroup("Total DH QALY",1,["Age/Sex Breakdown"],6))
 
 
+#TODO
+#1. find 'age' in line to get linesdown
+#2. find multiple blocks for title with one call
+#3. get ctgs, start_line, baseyear preprocess
+
+def parse_args():
+	parser = argparse.ArgumentParser()
+	parser.add_argument('filename',help='prefix of .out file to be reformatted'
+							'e.g. \'base\' if the .out file is \'base.out\'')
+	return parser.parse_args()
+
+
+def getCategories():
+	match = re.split(r'(\s\s+)',self.outfile.lines_list[start_line-2].rstrip())
+	categories = [c for c in match if len(m)>0 and m[0]!=' ']
+
+
+class Format(object):
+
+	def __init__(self):
+		pass
+
+
 def validateInput():
 	if len(sys.argv) < 2:
 		print("Input file name: e.g. 'format.py filename'")
