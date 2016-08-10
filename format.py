@@ -1,87 +1,93 @@
 #!/usr/bin/env python
 from __future__ import print_function
 
+import argparse
 import sys
 import os.path
 import re
 
 
-def main():
-	output_extension = '.frmt'
+OUTPUT_EXTENSION = '.frmt'
 
+SECTIONS = [["NEW CHD CASES"],
+			["CVD PREVALENCE - first of year"],
+			["NEW INTERVENED CHD CASES"],
+			["NUMBER TREATED"],
+			["CHD DEATHS"],
+			["CHD Deaths (Bridge)"],
+			["Acute CHD Death 11-17"],
+			["Acute CHD Death 1-10"],
+			["Acute CHD Deaths (Bridge & DH)"],
+			["Acute CHD Deaths (Bridge)"],
+			["Chronic CHD Death"],
+			["Non-CVD Death (DE)"],
+			["DE Intervened Non-CVD Deaths"],
+			["Non-CVD Death (DH)"],
+			["Total Pop (DE)"],
+			["Total Pop (DH 1-10)"],
+			['+',"Total Pop -- DE + (DH 1-10)","Total Pop (DE)","Total Pop (DH 1-10)"],
+			["Total Pop (DH 11-17)"],
+			["Total DE Diabetes Pop"],
+			["NEW HEART FAILURE CASES"],
+			["CVD EVENTS",17],
+			["Revascularization Events"],
+			["CVD POPULATION DISTRIBUTION BY STATE"],
+			["CVD POPULATION DISTRIBUTION BY STATE",15],
+			["CVD POPULATION DISTRIBUTION BY STATE",26],
+			["CVD POPULATION DISTRIBUTION BY STATE",37],
+			["CVD POPULATION DISTRIBUTION BY STATE",48],
+			["Total MI"],
+			["Bridge MI"],
+			["DH First MI (1,2,14)"],
+			["First MI"],
+			["DH 2nd MI (11,12,15, and dhxevt)"],
+			["DH Re-MI (3-8,11-13,15)"],
+			["DH MI Stroke (9,10,16,17)"],
+			["TOTAL STROKE"],
+			["BRIDGE STROKE"],
+			["NEW INTERVENED STROKE CASES"],
+			["First Stroke (DH ONLY)"],
+			["STROKE DEATHS"],
+			["TOTAL DEATHS"],
+			["NON-CVD Costs"],
+			["TOTAL CHD COSTS"],
+			["TOTAL PREVENTION COSTS"],
+			["TOTAL STROKE COSTS"],
+			["Total QALY"],
+			["Total DH QALY"]]
+
+
+def main():
 	args = parse_args()
 
 	outfile = find_outfile(args.filename)
-	formatted_file = open(args.filename + output_extension,'w')
+	formatted_file = open(args.filename + OUTPUT_EXTENSION,'w')
 
 	reformatter = Reformatter(outfile,formatted_file)
 	
-	reformatter.format(TrackedSection("NEW CHD CASES",2))
-	reformatter.format(TrackedSection("CVD PREVALENCE - first of year",1,["Prevalence"]))
-	reformatter.format(TrackedSection("NEW INTERVENED CHD CASES",2))
-	reformatter.format(TrackedSection("NUMBER TREATED",2,["DE","DH"]))
-	reformatter.format(TrackedSection("CHD DEATHS",2))
-	reformatter.format(TrackedSection("CHD Deaths (Bridge)",3))
-	reformatter.format(TrackedSection("Acute CHD Death 11-17",3))
-	reformatter.format(TrackedSection("Acute CHD Death 1-10",3))
-	reformatter.format(TrackedSection("Acute CHD Deaths (Bridge & DH)",3,
-					["Arrest","MI","Revasc"]))
-	reformatter.format(TrackedSection("Acute CHD Deaths (Bridge)",3,
-					["MI","Arrest In-Hospital","Arrest Pre-Hospital"]))
-	reformatter.format(TrackedSection("Chronic CHD Death",3))
-	reformatter.format(TrackedSection("Non-CVD Death",2))
-	reformatter.format(TrackedSection("Non-CVD Death (DE)",3))
-	reformatter.format(TrackedSection("DE Intervened Non-CVD Deaths", 3))
-	reformatter.format(TrackedSection("Non-CVD Death (DH)",3))
+	for section_params in SECTIONS:
+		if section_params[0] == '+':
+			section = add_sections(reformatter,*section_params[1:])
+		else:
+			section = TrackedSection(*section_params)
+			reformatter.format(section)
 
-	DE_group = TrackedSection("Total Pop (DE)",1)
-	DH_group = TrackedSection("Total Pop (DH 1-10)",1)
-	reformatter.format(DE_group)
-	reformatter.format(DH_group)
+		section.print(formatted_file)
 
-	Total_group = TrackedSection("Total Pop -- DE + (DH 1-10)",1)
-	Total_group.set_lines(DE_group)
-	Total_group.add_lines(DH_group)
-	Total_group.print_block(formatted_file)
 
-	reformatter.format(TrackedSection("Total Pop (DH 11-17)",1))
-	reformatter.format(TrackedSection("Total DE Diabetes Pop",1))
-	reformatter.format(TrackedSection("NEW DIABETES CASES",2))
-	reformatter.format(TrackedSection("Total DE Heart Failure Pop",1))
-	reformatter.format(TrackedSection("NEW HEART FAILURE CASES",2))
-	reformatter.format(TrackedSection("CVD EVENTS", 4, 
-					["ANGINA", "ARREST", "MI", "STROKE"],17))
-	reformatter.format(TrackedSection("Revascularization Events",4,
-					["AMI CABG","AMI PTCA","ISO CABG","ISO PTCA"],))
-	reformatter.format(TrackedSection("CVD POPULATION DISTRIBUTION BY STATE",4,
-					["ANGINA","REVSC","MI","TBD"]))
-	reformatter.format(TrackedSection("CVD POPULATION DISTRIBUTION BY STATE",4,
-					["REVSC + MI","TBD","TBD","TBD"],15))
-	reformatter.format(TrackedSection("CVD POPULATION DISTRIBUTION BY STATE",4,
-					["TOT/ISC","MT+STROKE","BRIDGE MI","BRIDGE MI + ARR"],26))
-	reformatter.format(TrackedSection("CVD POPULATION DISTRIBUTION BY STATE",4,
-					["BRIDGE ARREST","BRIDGE ANGINA","BRIDGE MI + REVSC","BRIDGE TOT STROKE"],37))
-	reformatter.format(TrackedSection("CVD POPULATION DISTRIBUTION BY STATE",1,
-					["BRIDGE HEM STROKE"],48))
-	reformatter.format(TrackedSection("Total MI",1))
-	reformatter.format(TrackedSection("Bridge MI",1))
-	reformatter.format(TrackedSection("DH First MI (1,2,14)",1))
-	reformatter.format(TrackedSection("First MI",1))
-	reformatter.format(TrackedSection("DH 2nd MI (11,12,15, and dhxevt)",1))
-	reformatter.format(TrackedSection("DH Re-MI (3-8,11-13,15)",1))
-	reformatter.format(TrackedSection("DH MI Stroke (9,10,16,17)",1))
-	reformatter.format(TrackedSection("TOTAL STROKE",2))
-	reformatter.format(TrackedSection("BRIDGE STROKE",2))
-	reformatter.format(TrackedSection("NEW INTERVENED STROKE CASES",2))
-	reformatter.format(TrackedSection("First Stroke (DH ONLY)",2))
-	reformatter.format(TrackedSection("STROKE DEATHS",2))
-	reformatter.format(TrackedSection("TOTAL DEATHS",2))
-	reformatter.format(TrackedSection("NON-CVD Costs",1,["BACKGROUND HEALTHCARE COST"],5))
-	reformatter.format(TrackedSection("TOTAL CHD COSTS",1,["Age/Sex Breakdown($)"],12))
-	reformatter.format(TrackedSection("TOTAL PREVENTION COSTS",1,["Age/Sex Breakdown($)"],6))
-	reformatter.format(TrackedSection("TOTAL STROKE COSTS",1,["Age/Sex Breakdown($)"],5))
-	reformatter.format(TrackedSection("Total QALY",1,["Age/Sex Breakdown"],6))
-	reformatter.format(TrackedSection("Total DH QALY",1,["Age/Sex Breakdown"],6))
+def add_sections(reformatter,title,*add_titles):
+	first_section = TrackedSection(add_titles[0])
+	reformatter.format(first_section)
+
+	section = first_section
+	section.title = title
+	
+	for cur_title in add_titles[1:]:
+		cur_section = TrackedSection(cur_title)
+		reformatter.format(cur_section)
+		section.add_lines(cur_section)
+
+	return section
 
 
 def parse_args():
@@ -91,12 +97,12 @@ def parse_args():
 	return parser.parse_args()
 
 
-def find_outfile():
-	if not os.path.isfile(sys.argv[1] + ".out"):
+def find_outfile(file_prefix):
+	if not os.path.isfile(file_prefix + ".out"):
 		print("Invalid File Name")
 		print("Execute by typing 'format.py filename'")
 		sys.exit()
-	return CVDOutfile(args.filename)
+	return CVDOutfile(file_prefix)
 
 
 class TrackedSection(object):
@@ -114,15 +120,12 @@ class TrackedSection(object):
 	def __init__(self, title, linesdown=0):
 		self.title = title
 		self.linesdown = linesdown
-		self.num_format = '{}     ' + '{:<18} '*(12*categories)
 		self.year_offset = 0
 		self.lines = [title]
+		self.num_format = ''
 
 	def append_line(self,str):
 		self.lines.append(str)
-
-	def set_lines(self,group):
-		self.lines[1:] = group.lines[1:]
 
 	def add_lines(self,group):
 		lines = group.lines
@@ -146,13 +149,14 @@ class TrackedSection(object):
 
 	def write_header(self,category_line):
 		header = OutputHeader(category_line)
-		topline = header.get_topline()
-		categories = header.get_categories()
+		formatted_topline = header.get_topline()
+		formatted_categories = header.get_categories()
 
-		self.append_line(topline)
-		self.append_line(categories)
+		self.num_format = '{}     ' + '{:<18} '*(12*len(header.categories))
+		self.append_line(formatted_categories)
+		self.append_line(formatted_topline)
 
-	def print_block(self,file):
+	def print(self,file):
 		for line in self.lines:
 			print(line,file=file)
 		file.write('\n')
@@ -165,7 +169,7 @@ class OutputHeader(object):
 	Contained in TrackedSection object
 
 	Attr:
-		categories: List of categories in 
+		categories: List of categories in containing section
 	"""
 
 	top_line= ['M35-44', 'M45-54', 'M55-64', 'M65-74', 'M75-84', 'M85-94', 
@@ -173,16 +177,21 @@ class OutputHeader(object):
 
 	def __init__(self,category_line):
 		self.categories = self._parse_categories(category_line)
-		self.category_format = '         ' + '{:<228}'*categories
-		self.topline_format = 'Year     ' + '{:<18} '*(12*categories)
+		self.num_categories = len(self.categories)
+		self.category_format = '         ' + '{:<228}'*self.num_categories
+		self.topline_format = 'Year     ' + '{:<18} '*(12*self.num_categories)
 
 	def _parse_categories(self,category_line):
 		match = re.split(r'(\s\s+)',category_line.rstrip())
-		categories = [c for c in match if len(m)>0 and m[0]!=' ']
+		categories = [m for m in match if len(m)>0 and m[0]!=' ']
+		if categories:
+			return categories
+		else:
+			return ['Age/Sex Breakdown']
 
 	def get_categories(self):
 		format_str = self.category_format
-		return format_str.format(*self.ctg_list)
+		return format_str.format(*self.categories)
 
 	def get_topline(self):
 		topline = self._make_topline()
@@ -191,7 +200,7 @@ class OutputHeader(object):
 
 	def _make_topline(self):
 		topline_full = []
-		for i in range(self.categories):
+		for i in range(self.num_categories):
 			topline_full += self.top_line
 		return topline_full
 
@@ -218,17 +227,15 @@ class Reformatter(object):
 			if self.outfile.find_title(line_num,section.title):
 				self._format_block(line_num,section)
 
-		section.print_block()
-
 	def _format_block(self,line_num,section):
 		base_year = self.outfile.base_year
 		start_line = self._next_block_line(section,line_num)
 
 		if section.year_offset == 0:
-			category_line = self.outfile.get_line(line_num-2)
+			category_line = self.outfile.get_line(start_line-2)
 			section.write_header(category_line)
 
-		num_list = self.outfile.get_block(start_line,section.categories)
+		num_list = self.outfile.get_block(start_line)
 		formatted_nums = section.format_num_line(base_year,num_list)
 		section.append_line(formatted_nums)
 
@@ -250,7 +257,6 @@ class CVDOutfile(object):
 		num_lines: Integer number of lines in lines_list
 	"""
 	base_year_line = 9
-	age_ranges = 6
 	max_lines_after = 15 
 
 	def __init__(self,filename):
@@ -284,7 +290,7 @@ class CVDOutfile(object):
 				return offset + line_num + 1
 		return -1
 
-	def get_block(self, start_line, categories):
+	def get_block(self, start_line):
 		"""Get list of values in block starting at line start_line"""
 		self._replace_bad_chars(start_line)
 		block_lines = self.lines_list[start_line:start_line+6]
@@ -324,7 +330,7 @@ class NumBlock(object):
 		reordered = []
 		for i in range(self.columns):
 			for j in range(self.rows):
-				reordered.append(self.num_list[i + columns*j])
+				reordered.append(self.num_list[i + self.columns*j])
 		self.num_list = reordered
 
 	def get_list(self):
