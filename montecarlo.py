@@ -59,24 +59,18 @@ def is_data_line(line):
 	return len(line) > 0 and str.isdigit(line[0][0])
 
 
-class Dist(object):
-	
-	def __init__(self,dist_name):
-		self.name = ''
-		self.fn = None
-		self.get_dist(dist_name)
+def invalid_distribution_error(dist_name):
+	print("Invalid distribution: " dist_name)
+	print("Valid distributions include: Normal, LogNormal, Beta, and Gamma")
+	sys.exit()
 
-	def get_dist(self,dist_name):
-		dist_name = dist_name.strip().lower()
-		if dist_name == 'norm' or dist_name == 'normal':
-			self.name = 'NORMAL'
-			self.fn = np.random.randn
-		elif dist_name == 'lognormal':
-			self.name = 'LOGNORMAL'
-			self.fn = np.random.lognormal
-		elif dist_name == 'beta':
-			self.name = 'BETA'
-			self.fn = np.random.beta
+
+def is_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
 
 
 class VFile(object):
@@ -225,10 +219,8 @@ class InpFile(VFile):
 
 	def vary_line(self,line_num):
 		line = self.lines[line_num]
-		sd = self.effects.get_sd(line)
-		if sd!=None:
-			mean = float(line.split()[0])
-			varied = mean + sd*mean
+		varied = self.effects.get_sd(line)
+		if varied!=None:
 			formatted = self.format_line([varied])
 			self.replace_line(formatted,line_num)
 
@@ -237,44 +229,114 @@ class Effects(object):
 	"""Contains standard deviations for .inp files
 
 	Attr:
-		sd_pairs: Dict of key->standard deviation pairs
+		key_result_pairs: Dict of key->standard deviation pairs
 		lines: Raw lines of effect_mc.txt
 		rnd: List of normally distributed random variables for each sd
 	"""
 
 	def __init__(self,zero_run=False):
-		self.sd_pairs = {}
+		self.key_result_pairs = {}
+		self.zero_run = zero_run
 		self.lines = read_lines('effect_mc.txt')
-		self.rnd = []
-		self._generate_rnd(zero_run)
 		self._generate_pairs()
-
-	def _generate_rnd(self,zero_run):
-		"""Generate random array or zero array if -z"""
-		size = len(self.lines) - 1
-		self.rnd = [0]*size if zero_run else np.random.randn(size)
 
 	def _generate_pairs(self):
 		sd_lines = self.lines[1:]
-		for i,line in enumerate(sd_lines):
-			key,sd = line.split(',')
-			self.sd_pairs[key] = float(sd)*self.rnd[i]
+		for line_num,line in enumerate(sd_lines):
+			key,num_lines = line.split(',')
+			component_lines = self.lines[line_num:line_num + num_lines]
+			self.sd_pairs[key] = self._sum_components(component_lines)
+
+	def _sum_components(self,component_lines):
+		s = 0
+		for line in component_lines:
+			effects = Dist(line)
+			s += effects.sample()
+		return s
 
 	def get_sd(self,line):
 		"""Return standard deviation appropriate for line, else None"""
 		for key,sd in self.sd_pairs.iteritems():
 			if line.find(key)!=-1:
-				self._test_repeats(key,line)
+				self._test_for_repeats(key,line)
 				return sd
 		return None
 
-	def _test_repeats(self,key,line):
+	def _test_for_repeats(self,key,line):
 		"""Make only one key found in line"""
 		other_keys = [k for k in self.sd_pairs.keys() if k!=key]
 		if any(line.find(k)!=-1 for k in other_keys): 
 			print('keys overlap -- keys must be unique to'
 								 'achieve desired behavior')
 			sys.exit()
+
+
+
+class Dist(object):
+
+	def __init__(self,data_line):
+		parts = data_line.split(',')
+		if is_number(parts[0]):  #if first listing is a number, assume normal distribution
+			self.parse_dist('norm')
+			params = parts
+		else: 
+			self.parse_dist(parts[0])
+			params = parts[1:]
+
+		self.params = [float(p) for p in params[:self.num_params]]
+
+		bounds = params[self.num_params:]
+		self.lower_bound = self.get_lower(bounds)
+		self.upper_bound = self.get_upper(bounds)
+
+
+	def get_lower(self,bounds):
+		try:
+			lower_bound = bounds[0]
+			return float(lower_bound)
+		except ValueError,IndexError:
+			return float("-inf")
+
+	def get_upper(self,bounds):
+		try:
+			upper_bound = bounds[1]
+			return float(upper_bound)
+		except ValueError,IndexError:
+			return float("inf")
+
+	def parse_dist(self,dist_name):
+		dist_name = dist_name.strip().lower()
+		if dist_name == 'norm' or dist_name == 'normal' or dist_name == '':
+			self.name = 'NORMAL'
+			self.fn = np.random.randn
+			self.num_params = 2
+
+		elif dist_name == 'lognormal':
+			self.name = 'LOGNORMAL'
+			self.fn = np.random.lognormal
+			self.num_params = 2
+
+		elif dist_name == 'beta' or dist_name == 'b':
+			self.name = 'BETA'
+			self.fn = np.random.beta
+			self.num_params = 2
+
+		elif dist_name == 'gamma':
+			self.name = 'GAMMA'
+			self.fn = np.random.gamma
+			self.num_params = 2
+
+		else:
+			invalid_distribution_error(dist_name) 
+
+	def sample(self):
+		val = self.fn(*self.params)
+		if val > self.upper_bound:
+			return self.upper_bound
+		elif val < self.lower_bound:
+			return self.lower_bound
+		else
+			return val
 
 
 if __name__ == '__main__':
