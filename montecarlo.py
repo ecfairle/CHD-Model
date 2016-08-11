@@ -21,6 +21,7 @@ the max number of digits to show past the decimal point.
 def main():
 	args = parse_args()
 	VFile.zero_run = args.zero_run
+	VFile.save = args.save
 
 	dat_files = read_lines('datfiles.txt')
 	for fname in dat_files:
@@ -60,7 +61,7 @@ def is_data_line(line):
 
 
 def invalid_distribution_error(dist_name):
-	print("Invalid distribution: " dist_name)
+	print("Invalid distribution: " + dist_name)
 	print("Valid distributions include: Normal, LogNormal, Beta, and Gamma")
 	sys.exit()
 
@@ -83,6 +84,7 @@ class VFile(object):
 		zero_run: Boolean, if true simulate with s.d. = 0
 	"""
 	zero_run = False
+	save = False
 
 	def __init__(self,fname):
 		pref,ext = fname.split('.')
@@ -138,16 +140,15 @@ class DatFile(VFile):
 			self.replace_line(formatted,line_num)
 
 	def set_format(self,fname):
-		"""Set frmt_str based on input/inputchk/{fname}.def"""
-		frmt_line = self._lines_format(fname)
+		"""Set 'frmt_str' based on last line of dat file"""
+		frmt_line = self._read_format_line(fname)
 		self.frmt_str = self._parse_format(frmt_line)
 
-	def _lines_format(self,fname):
-		"""Return line from .def file containing format information"""
+	def _read_format_line(self,fname):
 		return self.lines[-1]
 
 	def _parse_format(self,string):
-		"""Parse formatting information from .def file"""
+		"""Parse formatting information from raw string"""
 		spaces = re.findall(r'(\d+)x',string)
 		self.lead_spaces,num_spaces = [int(x) for x in spaces[:2]]
 		num_format = re.findall(r'f([0-9.]+)',string)[0]
@@ -219,8 +220,8 @@ class InpFile(VFile):
 
 	def vary_line(self,line_num):
 		line = self.lines[line_num]
-		varied = self.effects.get_sd(line)
-		if varied!=None:
+		varied = self.effects.get_val(line)
+		if varied != None:
 			formatted = self.format_line([varied])
 			self.replace_line(formatted,line_num)
 
@@ -229,7 +230,8 @@ class Effects(object):
 	"""Contains standard deviations for .inp files
 
 	Attr:
-		key_result_pairs: Dict of key->standard deviation pairs
+		key_result_pairs: Dict of key->varied value pairs - replace lines
+			containing 'key' with 'key_result_pairs[key]''
 		lines: Raw lines of effect_mc.txt
 		rnd: List of normally distributed random variables for each sd
 	"""
@@ -241,35 +243,40 @@ class Effects(object):
 		self._generate_pairs()
 
 	def _generate_pairs(self):
-		sd_lines = self.lines[1:]
-		for line_num,line in enumerate(sd_lines):
-			key,num_lines = line.split(',')
-			component_lines = self.lines[line_num:line_num + num_lines]
-			self.sd_pairs[key] = self._sum_components(component_lines)
+		data_lines = self.lines[1:]
+		line_num = 0
+		while line_num < len(data_lines):
+			key,num_lines = data_lines[line_num].split(',')
+			num_lines = int(num_lines)
+			
+			component_lines = data_lines[line_num + 1:line_num + num_lines + 1]
+			line_num += num_lines + 1  # skip past component lines
+
+			self.key_result_pairs[key] = self._sum_components(component_lines)
 
 	def _sum_components(self,component_lines):
+		"""Sum samples from each component distribution"""
 		s = 0
 		for line in component_lines:
 			effects = Dist(line)
 			s += effects.sample()
 		return s
 
-	def get_sd(self,line):
-		"""Return standard deviation appropriate for line, else None"""
-		for key,sd in self.sd_pairs.iteritems():
+	def get_val(self,line):
+		"""Return varied value appropriate for line, else None"""
+		for key,varied in self.key_result_pairs.iteritems():
 			if line.find(key)!=-1:
 				self._test_for_repeats(key,line)
-				return sd
+				return varied
 		return None
 
 	def _test_for_repeats(self,key,line):
 		"""Make only one key found in line"""
-		other_keys = [k for k in self.sd_pairs.keys() if k!=key]
+		other_keys = [k for k in self.key_result_pairs.keys() if k!=key]
 		if any(line.find(k)!=-1 for k in other_keys): 
 			print('keys overlap -- keys must be unique to'
 								 'achieve desired behavior')
 			sys.exit()
-
 
 
 class Dist(object):
@@ -277,10 +284,10 @@ class Dist(object):
 	def __init__(self,data_line):
 		parts = data_line.split(',')
 		if is_number(parts[0]):  #if first listing is a number, assume normal distribution
-			self.parse_dist('norm')
+			self.set_dist('norm')
 			params = parts
 		else: 
-			self.parse_dist(parts[0])
+			self.set_dist(parts[0])
 			params = parts[1:]
 
 		self.params = [float(p) for p in params[:self.num_params]]
@@ -294,21 +301,21 @@ class Dist(object):
 		try:
 			lower_bound = bounds[0]
 			return float(lower_bound)
-		except ValueError,IndexError:
+		except (ValueError,IndexError):
 			return float("-inf")
 
 	def get_upper(self,bounds):
 		try:
 			upper_bound = bounds[1]
 			return float(upper_bound)
-		except ValueError,IndexError:
+		except (ValueError,IndexError):
 			return float("inf")
 
-	def parse_dist(self,dist_name):
+	def set_dist(self,dist_name):
 		dist_name = dist_name.strip().lower()
 		if dist_name == 'norm' or dist_name == 'normal' or dist_name == '':
 			self.name = 'NORMAL'
-			self.fn = np.random.randn
+			self.fn = np.random.normal
 			self.num_params = 2
 
 		elif dist_name == 'lognormal':
@@ -335,7 +342,7 @@ class Dist(object):
 			return self.upper_bound
 		elif val < self.lower_bound:
 			return self.lower_bound
-		else
+		else:
 			return val
 
 
