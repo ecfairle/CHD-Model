@@ -277,13 +277,22 @@ class Effects(object):
 
 class Dist(object):
 
+	group_state = {}
+
 	def __init__(self,data_line):
 		parts = data_line.split(',')
-		if is_number(parts[0]):  #if first listing is a number, assume normal distribution
+
+		self.group = None
+		if self.set_group(parts[0]):
+			parts = parts[1:]
+
+		# if first listing (after group) is a number, assume normal distribution
+		if is_number(parts[0]):  
 			self.set_dist('norm')
 			params = parts
 		else: 
 			self.set_dist(parts[0])
+			self.set_group(parts[1])
 			params = parts[1:]
 
 		self.params = [float(p) for p in params[:self.num_params]]
@@ -292,6 +301,16 @@ class Dist(object):
 		self.lower_bound = self.get_lower(bounds)
 		self.upper_bound = self.get_upper(bounds)
 
+
+	def set_group(self,group_str):
+		"""Sets group for component, returns True if successful"""
+		match = re.search(r'g=(.+)',group_str)
+		if match is not None:
+			self.group = match.group(1)
+			if not self.group in self.group_state:
+				self.group_state[self.group] = np.random.get_state()
+			return True
+		return False
 
 	def get_lower(self,bounds):
 		try:
@@ -333,7 +352,14 @@ class Dist(object):
 			invalid_distribution_error(dist_name) 
 
 	def sample(self):
+		if self.group:
+			np.random.set_state(self.group_state[self.group])
+
 		val = self.fn(*self.params)
+		return self.threshold(val)
+		
+	def threshold(self,val):
+		print(val)
 		if val > self.upper_bound:
 			return self.upper_bound
 		elif val < self.lower_bound:
