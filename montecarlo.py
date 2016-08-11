@@ -20,19 +20,20 @@ the max number of digits to show past the decimal point.
 
 def main():
 	args = parse_args()
-	VFile.zero_run = args.zero_run
 	VFile.save = args.save
 
 	dat_files = read_lines('datfiles.txt')
 	for fname in dat_files:
 		datfile = DatFile(fname)
-		datfile.vary()
+		if not args.zero_run:
+			datfile.vary()
 		datfile.print_mc()
 
 	inp_files = parse_list(args.inpfiles)
 	for fname in inp_files:
 		inpfile = InpFile(fname)
-		inpfile.vary()
+		if not args.zero_run:
+			inpfile.vary()
 		inpfile.print_mc()
 
 
@@ -81,9 +82,8 @@ class VFile(object):
 		mc_file: File to write varied output to
 		lines: Raw lines of mc0 file
 		frmt_str: String to format data lines
-		zero_run: Boolean, if true simulate with s.d. = 0
+		save: Boolean flag - if True save variation info
 	"""
-	zero_run = False
 	save = False
 
 	def __init__(self,fname):
@@ -125,7 +125,7 @@ class DatFile(VFile):
 	def __init__(self,fname):
 		fpath = os.path.join('modfile',fname + '.dat')	
 		VFile.__init__(self,fpath)
-		self.sdfile = SDFile(fname,self.zero_run)
+		self.sdfile = SDFile(fname)
 		self.frmt_str = ''
 		self.lead_spaces = 0
 		self.set_format(fname)
@@ -133,9 +133,9 @@ class DatFile(VFile):
 	def vary_line(self,line_num):
 		means = self.lines[line_num].split()
 		if is_data_line(means):
-			sds = self.sdfile.sd_list(line_num)
+			variation = self.sdfile.get_variation(line_num)
 			means = [float(mean) for mean in means[1:]]
-			varied = [float(m + sd) for m,sd in zip(means,sds)]
+			varied = [float(m + sd) for m,sd in zip(means,variation)]
 			formatted = self.format_line(varied)
 			self.replace_line(formatted,line_num)
 
@@ -159,7 +159,7 @@ class DatFile(VFile):
 class SDFile(object):
 	"""Standard deviations for .dat files
 
-	same format as .dat file
+	Same format as .dat file
 	Attr:
 		lines: Raw lines in file
 		block_nums: List of block indices for each data line
@@ -167,18 +167,14 @@ class SDFile(object):
 		rnd: List of normally distributed random variables for each sd
 	"""
 
-	def __init__(self,fname,zero_run=False):
+	def __init__(self,fname):
 		sdpath = os.path.join('modfile',fname + 'sd.dat')
 		self.lines = read_lines(sdpath)
 		self.block_nums = [-1]*len(self.lines)
 		self.num_blocks = 0
 		self._set_block_nums()
 		self.cols = self._count_cols()
-		self.rnd = self._generate_rnd(zero_run)
-
-	def _generate_rnd(self,zero_run):
-		return (np.zeros((self.num_blocks/2,self.cols)) if zero_run 
-					else np.random.randn(self.num_blocks/2,self.cols))
+		self.rnd = np.random.randn(self.num_blocks/2,self.cols)
 
 	def _count_cols(self):
 		"""Get number of data columns"""
@@ -198,8 +194,8 @@ class SDFile(object):
 	def get_block_num(self,line_num):
 		return self.block_nums[line_num]
 
-	def sd_list(self,line_num):
-		"""Returns standard deviations as floats"""
+	def get_variation(self,line_num):
+		"""Returns list of variations for line 'line_num'"""
 		block_num = self.get_block_num(line_num)
 		sds = self.lines[line_num].split()
 		return [float(sd)*self.rnd[block_num%2,i] for i,sd in enumerate(sds[1:])]
@@ -209,12 +205,12 @@ class InpFile(VFile):
 	"""Varying .inp file
 
 	Attr:
-		effects: Effects object containing standard dev. info.
+		effects: Effects object containing variation data
 	"""
 
 	def __init__(self,fname):
 		VFile.__init__(self,fname + '.inp')
-		self.effects = Effects(self.zero_run)
+		self.effects = Effects()
 		self.frmt_str = '{:<8.6f}'
 		self.lead_spaces = 0
 
@@ -227,18 +223,18 @@ class InpFile(VFile):
 
 
 class Effects(object):
-	"""Contains standard deviations for .inp files
+	"""Contains data from effects_mc.txt
 
+	Used to vary .inp file.
+	effects_mc.txt format can be found on github.com/ecfairle/CHDMOD
 	Attr:
 		key_result_pairs: Dict of key->varied value pairs - replace lines
-			containing 'key' with 'key_result_pairs[key]''
+			containing 'key' with 'key_result_pairs[key]'
 		lines: Raw lines of effect_mc.txt
-		rnd: List of normally distributed random variables for each sd
 	"""
 
-	def __init__(self,zero_run=False):
+	def __init__(self):
 		self.key_result_pairs = {}
-		self.zero_run = zero_run
 		self.lines = read_lines('effect_mc.txt')
 		self._generate_pairs()
 
@@ -248,7 +244,7 @@ class Effects(object):
 		while line_num < len(data_lines):
 			key,num_lines = data_lines[line_num].split(',')
 			num_lines = int(num_lines)
-			
+
 			component_lines = data_lines[line_num + 1:line_num + num_lines + 1]
 			line_num += num_lines + 1  # skip past component lines
 
