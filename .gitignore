@@ -2,6 +2,7 @@
 *.BAS
 *.txt
 !examples/*.txt
+!requirements.txt
 basfiles
 *.chb
 *.std
