@@ -244,17 +244,28 @@ class Effects(object):
 	def __init__(self):
 		self.key_result_pairs = {}
 		self.add_mean = False
-		self.lines = read_lines('effect_mc.txt')
+		self.lines = []
+		self._read_lines()
 		self._generate_pairs()
 
+	def _read_lines(self):
+		file_lines = read_lines('effect_mc.txt')
+		for line in file_lines:
+			data = line.split('#')[0].strip()
+			if len(data) != 0:
+				self.lines.append(data)
+
+	def num_lines(self):
+		return len(self.lines)
+
 	def _generate_pairs(self):
-		data_lines = self.lines[1:]
+		# ignore everything after '#'
 		line_num = 0
-		while line_num < len(data_lines):
-			key,num_lines = data_lines[line_num].split(',')
+		while line_num < self.num_lines():
+			key,num_lines = self.lines[line_num].split(',')
 			num_lines = int(num_lines)
 
-			component_lines = data_lines[line_num + 1:line_num + num_lines + 1]
+			component_lines = self.lines[line_num + 1:line_num + num_lines + 1]
 			line_num += num_lines + 1  # skip past component lines
 
 			self.key_result_pairs[key] = self._sum_components(component_lines)
@@ -329,7 +340,7 @@ class Dist(object):
 		"""Sets group for component, returns True if successful"""
 		match = re.search(r'g=(.+)',group_str)
 		if match is not None:
-			self.group = match.group(1)
+			self.group = match.group(1).strip()
 			if not self.group in self.group_state:
 				self.group_state[self.group] = np.random.get_state()
 			return True
