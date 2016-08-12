@@ -217,7 +217,12 @@ class InpFile(VFile):
 	def vary_line(self,line_num):
 		line = self.lines[line_num]
 		varied = self.effects.get_val(line)
+
 		if varied != None:
+			mean = float(line.split()[0])
+			if self.effects.add_mean:
+				varied = mean + mean*varied
+
 			formatted = self.format_line([varied])
 			self.replace_line(formatted,line_num)
 
@@ -230,11 +235,15 @@ class Effects(object):
 	Attr:
 		key_result_pairs: Dict of key->varied value pairs - replace lines
 			containing 'key' with 'key_result_pairs[key]'
+		add_mean: Boolean, if True: add mean from .inp file varied value --
+			only set if there is exactly one component and it is normally
+			distributed that depends on the mean listed in the .inp file
 		lines: Raw lines of effect_mc.txt
 	"""
 
 	def __init__(self):
 		self.key_result_pairs = {}
+		self.add_mean = False
 		self.lines = read_lines('effect_mc.txt')
 		self._generate_pairs()
 
@@ -254,8 +263,16 @@ class Effects(object):
 		"""Sum samples from each component distribution"""
 		s = 0
 		for line in component_lines:
-			effects = Dist(line)
-			s += effects.sample()
+			dist = Dist(line)
+			s += dist.sample()
+			if dist.depends_on_mean_line():
+				self.add_mean = True
+			
+		if self.add_mean and len(component_lines) != 1:
+			print('error: the MEAN placeholder only makes sense when '
+				'the label contains a single component')
+			sys.exit()
+
 		return s
 
 	def get_val(self,line):
@@ -281,26 +298,32 @@ class Dist(object):
 
 	def __init__(self,data_line):
 		parts = data_line.split(',')
+		parts[0] = parts[0].strip()
 
 		self.group = None
 		if self.set_group(parts[0]):
 			parts = parts[1:]
 
 		# if first listing (after group) is a number, assume normal distribution
-		if is_number(parts[0]):  
+		if is_number(parts[0]) or parts[0].upper() == 'MEAN':  
 			self.set_dist('norm')
 			params = parts
 		else: 
 			self.set_dist(parts[0])
-			self.set_group(parts[1])
 			params = parts[1:]
 
-		self.params = [float(p) for p in params[:self.num_params]]
+		if self.name == 'NORMAL' and params[0].upper() == 'MEAN':
+			self.fn = np.random.randn
+			self.params = float(params[1])
+		else:
+			self.params = [float(p) for p in params[:self.num_params]]
 
 		bounds = params[self.num_params:]
 		self.lower_bound = self.get_lower(bounds)
 		self.upper_bound = self.get_upper(bounds)
 
+	def depends_on_mean_line(self):
+		return self.fn == np.random.randn
 
 	def set_group(self,group_str):
 		"""Sets group for component, returns True if successful"""
@@ -327,7 +350,7 @@ class Dist(object):
 			return float("inf")
 
 	def set_dist(self,dist_name):
-		dist_name = dist_name.strip().lower()
+		dist_name = dist_name.lower()
 		if dist_name == 'norm' or dist_name == 'normal' or dist_name == '':
 			self.name = 'NORMAL'
 			self.fn = np.random.normal
@@ -355,11 +378,14 @@ class Dist(object):
 		if self.group:
 			np.random.set_state(self.group_state[self.group])
 
-		val = self.fn(*self.params)
+		if self.fn == np.random.randn:
+			val = self.fn()*self.params
+		else:
+			val = self.fn(*self.params)
+
 		return self.threshold(val)
 		
 	def threshold(self,val):
-		print(val)
 		if val > self.upper_bound:
 			return self.upper_bound
 		elif val < self.lower_bound:
