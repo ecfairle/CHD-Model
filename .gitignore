@@ -1,6 +1,7 @@
 *.exe
 *.BAS
 *.txt
+!examples/*.txt
 basfiles
 *.chb
 *.std

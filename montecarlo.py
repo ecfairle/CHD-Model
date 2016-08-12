@@ -40,7 +40,8 @@ def main():
 def parse_args():
 	parser = argparse.ArgumentParser()
 	parser.add_argument('inpfiles',help='list of .inp file prefixes delimited by '
-							'anything other than letters/numbers')
+							'anything other than letters/numbers '
+							'(e.g. \'base,1000,2000\')')
 	parser.add_argument('--zero_run','-z',help='test simulation '
 							'with no variation',action='store_const',const=True)
 	parser.add_argument('--save','-s',help='save montecarlo results to modfile',
