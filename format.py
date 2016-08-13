@@ -73,7 +73,7 @@ def main():
 			section = TrackedSection(*section_params)
 			reformatter.format(section)
 
-		section.print(formatted_file)
+		section.print_lines(formatted_file)
 
 
 def add_sections(reformatter,title,*add_titles):
@@ -99,9 +99,8 @@ def parse_args():
 
 
 def find_outfile(file_prefix):
-	if not os.path.isfile(file_prefix + ".out"):
-		print("Invalid File Name")
-		print("Execute by typing 'format.py filename'")
+	if not os.path.isfile(file_prefix + '.out'):
+		print('Invalid File Name: ' + file_prefix + '.out')
 		sys.exit()
 	return CVDOutfile(file_prefix)
 
@@ -157,7 +156,7 @@ class TrackedSection(object):
 		self.append_line(formatted_categories)
 		self.append_line(formatted_topline)
 
-	def print(self,file):
+	def print_lines(self,file):
 		for line in self.lines:
 			print(line,file=file)
 		file.write('\n')

@@ -2,6 +2,7 @@
 from __future__ import print_function
 from operator import add
 import argparse
+import collections
 import numpy as np
 import os.path
 import re
@@ -11,6 +12,7 @@ import sys
 def main():
 	args = parse_args()
 	VFile.save = args.save
+	VFile.zero_run = args.zero_run
 
 	dat_files = read_lines('datfiles.txt')
 	for fname in dat_files:
@@ -76,6 +78,7 @@ class VFile(object):
 		save: Boolean flag - if True save variation info
 	"""
 	save = False
+	zero_run = False
 
 	def __init__(self,fname):
 		pref,ext = fname.split('.')
@@ -204,6 +207,13 @@ class InpFile(VFile):
 		self.effects = Effects()
 		self.frmt_str = '{:<8.6f}'
 		self.lead_spaces = 0
+		if self.save:
+			self.save_lines()
+
+	def save_lines(self):
+		if self.zero_run:
+			self.effects.print_labels()
+		self.effects.print_data()
 
 	def vary_line(self,line_num):
 		line = self.lines[line_num]
@@ -213,6 +223,7 @@ class InpFile(VFile):
 		if line_data != None:
 			varied,add_mean = line_data
 			mean = float(line.split()[0])
+
 			if add_mean:
 				varied = mean + mean*varied
 
@@ -226,19 +237,33 @@ class Effects(object):
 	Used to vary .inp file.
 	effects_mc.txt format can be found on github.com/ecfairle/CHDMOD
 	Attr:
-		key_result_pairs: Dict of key->varied value pairs - replace lines
-			containing 'key' with 'key_result_pairs[key]'
-		add_mean: Boolean, if True: add mean from .inp file varied value --
-			only set if there is exactly one component and it is normally
-			distributed that depends on the mean listed in the .inp file
+		key_result_pairs: Dict of key->data pairs - where
+			key_result_pairs[key][0]' replaces the value on the current line
+			and 'key_result_pairs[key][1]' indicates whether to add the mean
+			on the current line
 		lines: Raw lines of effect_mc.txt
 	"""
 
+	save_file_name = 'modfile/MC.txt'
+
 	def __init__(self):
-		self.key_result_pairs = {}
+		self.key_result_pairs = collections.OrderedDict()
 		self.lines = []
 		self._read_lines()
 		self._generate_pairs()
+
+	def print_data(self):
+		vals = [data[0] for key,data in self.key_result_pairs.items()]
+		format_str = '{:<16.7f}  '*len(vals)
+		with open(self.save_file_name,'a') as f:
+			f.write(format_str.format(*vals) + '\n')
+
+	def print_labels(self):
+		labels = [key for key in self.key_result_pairs]
+		format_str = '{:<16}  '*len(labels)
+		with open(self.save_file_name,'a') as f:
+			f.write(format_str.format(*labels) + '\n')
+
 
 	def _read_lines(self):
 		file_lines = read_lines('effect_mc.txt')
