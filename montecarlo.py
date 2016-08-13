@@ -7,16 +7,6 @@ import os.path
 import re
 import sys
 
-"""
-Assumptions: 
-1- dat files to be varied listed in datfiles.txt
-
-2- last line of _mc0 file of dat files contains format string
-of form 'FORMAT:(14x (f9.6,3x))' where 14 is the number of leading
-spaces, 9 is the max number of slots to allow for the number, 6 is 
-the max number of digits to show past the decimal point.
-"""
-
 
 def main():
 	args = parse_args()
@@ -175,7 +165,7 @@ class SDFile(object):
 		self.num_blocks = 0
 		self._set_block_nums()
 		self.cols = self._count_cols()
-		self.rnd = np.random.randn(self.num_blocks/2,self.cols)
+		self.rnd = np.random.randn(self.num_blocks//2,self.cols)
 
 	def _count_cols(self):
 		"""Get number of data columns"""
@@ -188,9 +178,9 @@ class SDFile(object):
 		n_line = 0
 		for i,line in enumerate(self.lines):
 			if is_data_line(line.split()):
-				self.block_nums[i] = n_line/6
+				self.block_nums[i] = n_line//6
 				n_line += 1
-		self.num_blocks = n_line/6
+		self.num_blocks = n_line//6
 
 	def get_block_num(self,line_num):
 		return self.block_nums[line_num]
@@ -217,11 +207,13 @@ class InpFile(VFile):
 
 	def vary_line(self,line_num):
 		line = self.lines[line_num]
-		varied = self.effects.get_val(line)
 
-		if varied != None:
+		line_data =  self.effects.get_data(line)
+
+		if line_data != None:
+			varied,add_mean = line_data
 			mean = float(line.split()[0])
-			if self.effects.add_mean:
+			if add_mean:
 				varied = mean + mean*varied
 
 			formatted = self.format_line([varied])
@@ -244,7 +236,6 @@ class Effects(object):
 
 	def __init__(self):
 		self.key_result_pairs = {}
-		self.add_mean = False
 		self.lines = []
 		self._read_lines()
 		self._generate_pairs()
@@ -274,22 +265,23 @@ class Effects(object):
 	def _sum_components(self,component_lines):
 		"""Sum samples from each component distribution"""
 		s = 0
+		add_mean = False
 		for line in component_lines:
 			dist = Dist(line)
 			s += dist.sample()
 			if dist.depends_on_mean_line():
-				self.add_mean = True
+				add_mean = True
 			
-		if self.add_mean and len(component_lines) != 1:
+		if add_mean and len(component_lines) != 1:
 			print('error: the MEAN placeholder only makes sense when '
 				'the label contains a single component')
 			sys.exit()
 
-		return s
+		return s, add_mean
 
-	def get_val(self,line):
+	def get_data(self,line):
 		"""Return varied value appropriate for line, else None"""
-		for key,varied in self.key_result_pairs.iteritems():
+		for key,varied in self.key_result_pairs.items():
 			if line.find(key)!=-1:
 				self._test_for_repeats(key,line)
 				return varied
