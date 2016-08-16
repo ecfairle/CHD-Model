@@ -14,14 +14,14 @@ def main():
 	VFile.save = args.save
 	VFile.zero_run = args.zero_run
 
-	dat_files = read_lines('datfiles.txt')
+	dat_files = get_dat_files()
 	for fname in dat_files:
 		datfile = DatFile(fname)
 		if not args.zero_run:
 			datfile.vary()
 		datfile.print_mc()
 
-	inp_files = parse_list(args.inpfiles)
+	inp_files = get_inp_files(args)
 	for fname in inp_files:
 		inpfile = InpFile(fname)
 		if not args.zero_run:
@@ -31,32 +31,50 @@ def main():
 
 def parse_args():
 	parser = argparse.ArgumentParser()
-	parser.add_argument('inpfiles',help='list of .inp file prefixes delimited by '
-							'anything other than letters/numbers '
-							'(e.g. \'base,1000,2000\')')
-	parser.add_argument('--zero_run','-z',help='test simulation '
+	inpgroup = parser.add_argument_group('.inp files')
+	mut_group = inpgroup.add_mutually_exclusive_group()
+	mut_group.add_argument('--list','-f',dest='prefixes', nargs='+', type=str, 
+							help='list of .inp file prefixes ')
+	mut_group.add_argument('--readfile','-r',dest='prefix_file', nargs=1, 
+							type=argparse.FileType('w'), help='file '
+							'listing .inp file prefixes to be varied')
+	options_group = parser.add_argument_group('options')
+	options_group.add_argument('--zero_run','-z',help='test simulation '
 							'with no variation',action='store_const',const=True)
-	parser.add_argument('--save','-s',help='save montecarlo results to modfile',
+	options_group.add_argument('--save','-s',help='save montecarlo results to modfile',
 							action='store_const',const=True)
 	return parser.parse_args()
 
 
-def parse_list(files):
-	return re.findall(r"[\w']+",files)
+def get_dat_files():
+	try:
+		with open('datfiles.txt','r') as f:
+			return f.read().splitlines()
+	except FileNotFoundError:
+		return None
 
+
+def get_inp_files(files):
+	if args.prefixes:
+		return args.prefixes
+	elif args.prefix_file:
+		return args.prefix_file.read.splitlines()
 
 def read_lines(fname):
-	with open(fname,'r') as f:
-		return f.read().splitlines()
-
+	try:
+		with open(fname,'r') as f:
+			return f.read().splitlines()
+	except FileNotFoundError:
+		print('File: ' + fname + ' not found.')
+		sys.exit()
 
 def is_data_line(line):
 	return len(line) > 0 and str.isdigit(line[0][0])
 
 
 def invalid_distribution_error(dist_name):
-	print("Invalid distribution: " + dist_name)
-	print("Valid distributions include: Normal, LogNormal, Beta, and Gamma")
+	print('Invalid distribution: ' + dist_name)
+	print('Valid distributions include: Normal, LogNormal, Beta, and Gamma')
 	sys.exit()
 
 
