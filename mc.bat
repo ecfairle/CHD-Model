@@ -3,7 +3,11 @@
 setlocal enabledelayedexpansion
 
 if exist modfile\MC\inp.txt (
-	Del modfile\MC\inp.txt 
+	del modfile\MC\inp.txt 
+)
+
+if not exist modfile\MC\datfiles (
+	mkdir modfile\MC\datfiles
 )
 
 if not exist output_files ( 
@@ -24,15 +28,18 @@ for /L %%A in (0,1,%iterations%) do (
 		py -3.5 montecarlo.py -r %inp_prefix_file% -z -s
 	) else (
 		REM print iteration number to file
-		echo %%A
 		set  "pr=%%A:              "
-		echo !pr!
 	  	<nul set /p =!pr:~0,16! >> modfile\MC\inp.txt
 		py -3.5 montecarlo.py -r %inp_prefix_file% -s
 	)
+	for /F "tokens=*" %%f in (datfiles.txt) do (
+		if exist modfile\%%f_mc.dat (
+			copy modfile\%%f_mc.dat  modfile\MC\datfiles\%%f_%%A.dat >nul
+		)
+	)
 	for /F "tokens=*" %%f in (%inp_prefix_file%) do (
 		if exist %%f.out (
-			Del %%f.out
+			del %%f.out
 		)
 	  	CHDMOD90<%%f_mc.inp>junk.txt
 	  	py format.py %%f
