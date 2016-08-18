@@ -1,28 +1,38 @@
 # Any line with only whitespace or with only whitespace before a '#' will be ignored
-
-#    keyword: label to search for on line
-#    
+    
 
 #SECTION FORMAT
 #------------------------------------------------------------------------------------------
 #0:   		    keyword,num_components 
-#1:    		    [g=group_name,][dist_name,]param1,param2,...[,lower_bound][,upper_bound]  
-#2:    		    [g=group_name,][dist_name,]param1,...   
-#   		    ... 
+#1:    		    	[g=group_name,][dist_name,]param1,param2,...[,lower_bound][,upper_bound]  
+#2:    		    	[g=group_name,][dist_name,]param1,...   
+#   		    	... 
 #num_components:    [g=group_name,][dist_name,]...
 #-------------------------------------------------------------------------------------------
 
-
-effect_1,2
-	g=1  ,.4,.01,0 # group 1, defaults to normal distribution, mean=.4, sd=.01, lower bound = 0, upper bound defaults to +inf
-	    .1,.03     # no group, defaults to normal, mean=.4, sd=.03, lb=-inf, ub=+inf
-
-cost,3
-	g=2,lognormal,.5477,.01 # group 2 
-	g=2,	      .433, .12
-
-	#grp,dist,params        ,lb,ub 
-	g=3 ,beta,    1,     .2 ,.4,.5
-
-qaly_1,2
-	g=1,MEAN,.01,0,1 # usage of 'MEAN' option for using mean from file
+# keyword,n   (n= number of components of the cost or qaly to be varied)
+HIEFFECT,1
+   g=1,0.5477,0.02
+   
+MODEFFECT,1
+g=1,0.4,0.02
+HICOSTAHA,6
+   g=2, 0.0095, 0.0030, 0.0        #Myopathy
+   g=3, 1.17, 0.15, 0.0            #Liver panel
+   g=4, 7.30, 0.91, 0.0            #Doctor Visit
+   g=5, 1.50, 0.47, 0.0            #Stroke
+   g=6, 7.75, 3.00, 0.0            #Diabetes
+   g=7, 148.30, 37.04, 0.0         #Statin, high intensity 
+MODCOSTAHA,6
+   g=2, 0.0095, 0.0030, 0.0        #Myopathy
+   g=3, 1.17, 0.15, 0.0            #Liver panel
+   g=4, 7.30, 0.91, 0.0            #Doctor Visit
+   g=5, 1.50, 0.47, 0.0            #Stroke
+   g=6, 7.75, 3.00, 0.0            #Diabetes
+   g=7, 48.67, 12.17, 0.0          #Statin, moderate intensity 
+STATINQALY,5
+        0.000001, 0.0000005, 0.0     #Myopathy
+        0.0000312, 0.00001560, 0.0   #Stroke
+        0.0000747, 0.0000448, 0.0    #Diabetes
+        0.0001, 0.000248, 0.0        #Unforeseen
+        0.0, 0.0008, 0.0             #Pill disutility
