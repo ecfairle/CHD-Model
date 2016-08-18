@@ -11,8 +11,6 @@ import sys
 
 def main():
 	args = parse_args()
-	VFile.save = args.save
-	VFile.zero_run = args.zero_run
 
 	dat_files = get_dat_files()
 	for fname in dat_files:
@@ -22,8 +20,13 @@ def main():
 		datfile.print_mc()
 
 	inp_files = get_inp_files(args)
-	for fname in inp_files:
+	for i, fname in enumerate(inp_files):
 		inpfile = InpFile(fname)
+		if i == 0 and args.save:
+			if args.zero_run:
+				inpfile.effects.print_labels()
+			inpfile.effects.print_data()
+
 		if not args.zero_run:
 			inpfile.vary()
 		inpfile.print_mc()
@@ -33,17 +36,24 @@ def parse_args():
 	parser = argparse.ArgumentParser()
 	inpgroup = parser.add_argument_group('.inp files')
 	mut_group = inpgroup.add_mutually_exclusive_group()
-	mut_group.add_argument('--list','-f',dest='prefixes', nargs='+', type=str, 
+	mut_group.add_argument('--list','-l',dest='prefixes', nargs='+', type=str, 
 							help='list of .inp file prefixes ')
-	mut_group.add_argument('--readfile','-r',dest='prefix_file', nargs=1, 
-							type=argparse.FileType('w'), help='file '
-							'listing .inp file prefixes to be varied')
+	mut_group.add_argument('--readfile','-r',dest='prefix_file', 
+							type=is_valid_file, default='prefix_files.txt', 
+							help='file listing .inp file prefixes to be varied')
 	options_group = parser.add_argument_group('options')
 	options_group.add_argument('--zero_run','-z',help='test simulation '
-							'with no variation',action='store_const',const=True)
+							'with no variation',action='store_true')
 	options_group.add_argument('--save','-s',help='save montecarlo results to modfile',
-							action='store_const',const=True)
+							action='store_true')
 	return parser.parse_args()
+
+
+def is_valid_file(filename):
+    if not os.path.exists(filename):
+    	raise argparse.ArgumentTypeError("The file %s cannot be found" % filename)
+    else:
+        return open(filename, 'r')
 
 
 def get_dat_files():
@@ -51,22 +61,18 @@ def get_dat_files():
 		with open('datfiles.txt','r') as f:
 			return f.read().splitlines()
 	except FileNotFoundError:
-		return None
+		return []
 
 
-def get_inp_files(files):
+def get_inp_files(args):
 	if args.prefixes:
 		return args.prefixes
 	elif args.prefix_file:
-		return args.prefix_file.read.splitlines()
+		return args.prefix_file.read().splitlines()
 
 def read_lines(fname):
-	try:
-		with open(fname,'r') as f:
-			return f.read().splitlines()
-	except FileNotFoundError:
-		print('File: ' + fname + ' not found.')
-		sys.exit()
+	with open(fname,'r') as f:
+		return f.read().splitlines()
 
 def is_data_line(line):
 	return len(line) > 0 and str.isdigit(line[0][0])
@@ -95,8 +101,6 @@ class VFile(object):
 		frmt_str: String to format data lines
 		save: Boolean flag - if True save variation info
 	"""
-	save = False
-	zero_run = False
 
 	def __init__(self,fname):
 		pref,ext = fname.split('.')
@@ -220,13 +224,12 @@ class InpFile(VFile):
 		effects: Effects object containing variation data
 	"""
 
+
 	def __init__(self,fname):
 		VFile.__init__(self,fname + '.inp')
 		self.effects = Effects()
 		self.frmt_str = '{:<8.6f}'
 		self.lead_spaces = 0
-		if self.save:
-			self.save_lines()
 
 	def save_lines(self):
 		if self.zero_run:
@@ -262,7 +265,7 @@ class Effects(object):
 		lines: Raw lines of effect_mc.txt
 	"""
 
-	save_file_name = 'modfile/MC.txt'
+	save_file_name = 'modfile/MC/inp.txt'
 
 	def __init__(self):
 		self.key_result_pairs = collections.OrderedDict()
@@ -278,9 +281,10 @@ class Effects(object):
 
 	def print_labels(self):
 		labels = [key for key in self.key_result_pairs]
-		format_str = '{:<16}  '*len(labels)
+		format_str = '{:<16}  '*(len(labels) + 1)
 		with open(self.save_file_name,'a') as f:
-			f.write(format_str.format(*labels) + '\n')
+			f.write(format_str.format('line #',*labels) + '\n')
+			f.write('{:<16} '.format('0:'))  # label for first data line
 
 
 	def _read_lines(self):
@@ -312,8 +316,7 @@ class Effects(object):
 		for line in component_lines:
 			dist = Dist(line)
 			s += dist.sample()
-			if dist.depends_on_mean_line():
-				add_mean = True
+			add_mean = dist.depends_on_mean_line()
 			
 		if add_mean and len(component_lines) != 1:
 			print('error: the MEAN placeholder only makes sense when '
