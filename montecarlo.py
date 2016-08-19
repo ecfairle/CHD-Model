@@ -25,7 +25,8 @@ def main():
 		if i == 0 and args.save:
 			if args.zero_run:
 				inpfile.effects.print_labels()
-			inpfile.effects.print_data()
+			else:
+				inpfile.effects.print_data()
 
 		if not args.zero_run:
 			inpfile.vary()
@@ -231,11 +232,6 @@ class InpFile(VFile):
 		self.frmt_str = '{:<8.6f}'
 		self.lead_spaces = 0
 
-	def save_lines(self):
-		if self.zero_run:
-			self.effects.print_labels()
-		self.effects.print_data()
-
 	def vary_line(self,line_num):
 		line = self.lines[line_num]
 
@@ -276,16 +272,16 @@ class Effects(object):
 	def print_data(self):
 		vals = [data[0] for key,data in self.key_result_pairs.items()]
 		format_str = '{:<16.7f}  '*len(vals)
-		with open(self.save_file_name,'a') as f:
-			f.write(format_str.format(*vals) + '\n')
+		self.save_write(format_str.format(*vals) + '\n')
 
 	def print_labels(self):
 		labels = [key for key in self.key_result_pairs]
 		format_str = '{:<16}  '*(len(labels) + 1)
-		with open(self.save_file_name,'a') as f:
-			f.write(format_str.format('line #',*labels) + '\n')
-			f.write('{:<16} '.format('0:'))  # label for first data line
+		self.save_write(format_str.format('line #',*labels) + '\n')
 
+	def save_write(self,string):
+		with open(self.save_file_name,'a') as f:
+			f.write(string)
 
 	def _read_lines(self):
 		file_lines = read_lines('effect_mc.txt')
@@ -314,9 +310,9 @@ class Effects(object):
 		s = 0
 		add_mean = False
 		for line in component_lines:
-			dist = Dist(line)
-			s += dist.sample()
-			add_mean = dist.depends_on_mean_line()
+			component = Component(line)
+			s += component.sample()
+			add_mean = component.depends_on_mean_line()
 			
 		if add_mean and len(component_lines) != 1:
 			print('error: the MEAN placeholder only makes sense when '
@@ -342,7 +338,7 @@ class Effects(object):
 			sys.exit()
 
 
-class Dist(object):
+class Component(object):
 
 	group_state = {}
 
