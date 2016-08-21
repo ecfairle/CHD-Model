@@ -16,19 +16,22 @@ Using format.py only requires a **.out** file outputted by a successful model ru
 
 ## Montecarlo Simulations
 
-Running a single Montecarlo simulation is done by executing `montecarlo.py`. This requires at least one **_mc0.inp** file and **_mc0.dat** files for each **.dat** file that should be varied. 
+Running a single Montecarlo simulation is done by executing `montecarlo.py`. 
 
 ### Input Files
 
+Besides model input files, information for montecarlo simulations is stored in directory MC. This includes output, [inputs](MC/inputs) and input variation data. 
 #### Dat Files
 
-Each **_mc0.dat** file should be identical to the original **.dat** file but with a formatting string with the following format on the last line `FORMAT:(14x (f9.6,3x))`. This describes the formatting for data lines in this file expected by the model. (e.g. this would imply 14 leading spaces, floats occupying up to 9 spaces with up to 6-digit precision and 3 trailing spaces per numeric entry.)
+Each **_mc0.dat** file should be identical to the original **.dat** file but with a formatting string with the following format on the last line `FORMAT:(14x (f9.6,3x))`. This describes the formatting for data lines in this file expected by the model. (e.g. this would imply 14 leading spaces, floats occupying up to 9 spaces with up to 6-digit precision and 3 trailing spaces per numeric entry.) 
+
+List **.dat** files to be varied in [dat_files.txt](MC/inputs/dat_files.txt)
 
 #### Inp Files
 
-Each **_mc0.inp**  should have unique labels for each input value that is being varied. These labels and other information about varying the **.inp** file should be listed in [effect_mc.txt](examples/effect_mc.txt).
+Each **_mc0.inp**  should have unique labels for each input value that is being varied. These labels and other information about varying the **.inp** file should be listed in [inp_variation.txt](MC/inputs/inp_variation.txt). Prefixes of **.inp** files to be varied should be listed in [inp_files.txt](MC/inputs/inp_files.txt) 
 
-**effects_mc.txt** describes which lines should be varied (found using a keyword) and how to vary them. **effects_mc.txt** lines should be separated into sections based on a key word (to find the right lines) which corresponds a number (or set of numbers) to be varied. These sections are each composed of components, each of which corresponds to a distribution with set parameters. Here is a description of the format and options associated with each section: 
+**inp_variation.txt** describes which lines should be varied (found using labels) and how to vary them. **inp_variation.txt** lines should be separated into sections based on a key word (to find the right lines) which corresponds a number (or set of numbers) to be varied. These sections are each composed of components, each of which corresponds to a distribution with set parameters. Here is a description of the format and options associated with each section: 
 
  ```
     keyword,num_components 
@@ -37,7 +40,7 @@ Each **_mc0.inp**  should have unique labels for each input value that is being 
     ... 
     [g=group_name,][dist_name,]...
  ```
-Read [example file](examples/effect_mc.txt) to see how this is done.
+Read the [example file](MC/inputs/inp_variation.txt) to see how this is done.
 
 ##### Components
 A section can consist of a single component but multiple components allows you to separate data in ways that aren't considered by the model itself. 

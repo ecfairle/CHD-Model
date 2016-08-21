@@ -1,7 +1,6 @@
 *.exe
 *.BAS
 *.txt
-!examples/*.txt
 !requirements.txt
 basfiles
 *.chb
@@ -10,3 +9,4 @@ basfiles
 *.out
 *_old.*
 modfile
+!MC/inputs/*.txt
