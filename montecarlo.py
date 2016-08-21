@@ -8,7 +8,6 @@ import os.path
 import re
 import sys
 
-
 def main():
 	args = parse_args()
 
@@ -40,8 +39,9 @@ def parse_args():
 	mut_group.add_argument('--list','-l',dest='prefixes', nargs='+', type=str, 
 							help='list of .inp file prefixes ')
 	mut_group.add_argument('--readfile','-r',dest='prefix_file', 
-							type=is_valid_file, default='prefix_files.txt', 
-							help='file listing .inp file prefixes to be varied')
+							action='store_const', const='MC/inputs/inp_files.txt',
+							help='determine .inp files to be varied from listings in '
+							'MC/inputs/inp_files.txt')
 	options_group = parser.add_argument_group('options')
 	options_group.add_argument('--zero_run','-z',help='test simulation '
 							'with no variation',action='store_true')
@@ -59,9 +59,9 @@ def is_valid_file(filename):
 
 def get_dat_files():
 	try:
-		with open('datfiles.txt','r') as f:
+		with open('MC/inputs/dat_files.txt','r') as f:
 			return f.read().splitlines()
-	except FileNotFoundError:
+	except IOError:
 		return []
 
 
@@ -69,7 +69,9 @@ def get_inp_files(args):
 	if args.prefixes:
 		return args.prefixes
 	elif args.prefix_file:
-		return args.prefix_file.read().splitlines()
+		return open(args.prefix_file,'r').read().splitlines()
+	else:
+		return []
 
 def read_lines(fname):
 	with open(fname,'r') as f:
@@ -249,19 +251,19 @@ class InpFile(VFile):
 
 
 class Effects(object):
-	"""Contains data from effects_mc.txt
+	"""Contains data from inp_variation.txt
 
 	Used to vary .inp file.
-	effects_mc.txt format can be found on github.com/ecfairle/CHDMOD
+	inp_variation.txt format can be found on github.com/ecfairle/CHDMOD
 	Attr:
 		key_result_pairs: Dict of key->data pairs - where
 			key_result_pairs[key][0]' replaces the value on the current line
 			and 'key_result_pairs[key][1]' indicates whether to add the mean
 			on the current line
-		lines: Raw lines of effect_mc.txt
+		lines: Raw lines of inp_variation.txt
 	"""
 
-	save_file_name = 'modfile/MC/inp.txt'
+	save_file_name = 'MC\input_variation\inp.txt'
 
 	def __init__(self):
 		self.key_result_pairs = collections.OrderedDict()
@@ -284,7 +286,7 @@ class Effects(object):
 			f.write(string)
 
 	def _read_lines(self):
-		file_lines = read_lines('effect_mc.txt')
+		file_lines = read_lines('MC/inputs/inp_variation.txt')
 		for line in file_lines:
 			data = line.split('#')[0].strip()
 			if len(data) != 0:

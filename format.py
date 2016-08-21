@@ -101,6 +101,7 @@ def parse_args():
 def find_outfile(file_prefix):
 	if not os.path.isfile(file_prefix + '.out'):
 		print('Invalid File Name: ' + file_prefix + '.out')
+		print('If using mc.bat, ensure .out file is made with same prefix as inp file')
 		sys.exit()
 	return CVDOutfile(file_prefix)
 
