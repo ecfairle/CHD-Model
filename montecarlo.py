@@ -34,27 +34,20 @@ def main():
 
 def parse_args():
 	parser = argparse.ArgumentParser()
-	inpgroup = parser.add_argument_group('.inp files')
+	inpgroup = parser.add_argument_group('.inp files, -r is default')
 	mut_group = inpgroup.add_mutually_exclusive_group()
 	mut_group.add_argument('--list','-l',dest='prefixes', nargs='+', type=str, 
 							help='list of .inp file prefixes ')
 	mut_group.add_argument('--readfile','-r',dest='prefix_file', 
 							action='store_const', const='MC/inputs/inp_files.txt',
 							help='determine .inp files to be varied from listings in '
-							'MC/inputs/inp_files.txt')
+							'MC/inputs/inp_files.txt',default='MC/inputs/inp_files.txt')
 	options_group = parser.add_argument_group('options')
 	options_group.add_argument('--zero_run','-z',help='test simulation '
 							'with no variation',action='store_true')
 	options_group.add_argument('--save','-s',help='save montecarlo results to modfile',
 							action='store_true')
 	return parser.parse_args()
-
-
-def is_valid_file(filename):
-    if not os.path.exists(filename):
-    	raise argparse.ArgumentTypeError("The file %s cannot be found" % filename)
-    else:
-        return open(filename, 'r')
 
 
 def get_dat_files():
@@ -68,7 +61,7 @@ def get_dat_files():
 def get_inp_files(args):
 	if args.prefixes:
 		return args.prefixes
-	elif args.prefix_file:
+	elif os.path.exists(args.prefix_file):
 		return open(args.prefix_file,'r').read().splitlines()
 	else:
 		return []
