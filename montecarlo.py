@@ -37,11 +37,11 @@ def parse_args():
 	inpgroup = parser.add_argument_group('.inp files, -r is default')
 	mut_group = inpgroup.add_mutually_exclusive_group()
 	mut_group.add_argument('--list','-l',dest='prefixes', nargs='+', type=str, 
-							help='list of .inp file prefixes ')
+							help='list of .inp file prefixes')
 	mut_group.add_argument('--readfile','-r',dest='prefix_file', 
 							action='store_const', const='MC/inputs/inp_files.txt',
 							help='determine .inp files to be varied from listings in '
-							'MC/inputs/inp_files.txt',default='MC/inputs/inp_files.txt')
+							'MC/inputs/inp_files.txt',default='MC/inputs/inp_files.txt (default)')
 	options_group = parser.add_argument_group('options')
 	options_group.add_argument('--zero_run','-z',help='test simulation '
 							'with no variation',action='store_true')
@@ -53,7 +53,7 @@ def parse_args():
 def get_dat_files():
 	try:
 		with open('MC/inputs/dat_files.txt','r') as f:
-			return f.read().splitlines()
+			return [line for line in f.read().splitlines() if line.strip()!='']
 	except IOError:
 		return []
 
@@ -62,13 +62,18 @@ def get_inp_files(args):
 	if args.prefixes:
 		return args.prefixes
 	elif os.path.exists(args.prefix_file):
-		return open(args.prefix_file,'r').read().splitlines()
+		lines = open(args.prefix_file,'r').read().splitlines()
+		return [line for line in lines if line.strip()!='']
 	else:
 		return []
 
 def read_lines(fname):
-	with open(fname,'r') as f:
-		return f.read().splitlines()
+	try:
+		with open(fname,'r') as f:
+			return f.read().splitlines()
+	except IOError:
+		print('Cannot find file: {}'.format(fname))
+		sys.exit()
 
 def is_data_line(line):
 	return len(line) > 0 and str.isdigit(line[0][0])
@@ -135,8 +140,8 @@ class DatFile(VFile):
 	"""
 
 	def __init__(self,fname):
-		fpath = os.path.join('modfile',fname + '.dat')	
-		VFile.__init__(self,fpath)
+		self.fpath = os.path.join('modfile',fname + '.dat')	
+		VFile.__init__(self,self.fpath)
 		self.sdfile = SDFile(fname)
 		self.frmt_str = ''
 		self.lead_spaces = 0
@@ -157,15 +162,35 @@ class DatFile(VFile):
 		self.frmt_str = self._parse_format(frmt_line)
 
 	def _read_format_line(self,fname):
-		return self.lines[-1]
+		line = self.lines[-1].rstrip()
+		if line == '':
+			print('Missing format string in {}'.format(self.fpath))
+			sys.exit()
+		return line
+
 
 	def _parse_format(self,string):
 		"""Parse formatting information from raw string"""
-		spaces = re.findall(r'(\d+)x',string)
-		self.lead_spaces,num_spaces = [int(x) for x in spaces[:2]]
-		num_format = re.findall(r'f([0-9.]+)',string)[0]
-		return ('{{:<{0}f}}'.format(num_format) 
-				+ ' '*int(num_spaces))
+		self.lead_spaces,num_spaces = self._get_spaces(string)
+		num_format = self._get_num_format(string)
+
+		format_string = ('{{:<{0}f}}{1}'.format(num_format,' '*int(num_spaces)))
+		return format_string
+
+	def _get_spaces(self,string):
+		space_nums = re.findall(r'(\d+)x',string)
+		if len(space_nums) < 2:
+			print('Improper format string in {}'.format(self.fpath))
+			sys.exit()
+		else:
+			return [int(x) for x in space_nums[:2]]
+
+	def _get_num_format(self,string):
+		try:
+			return re.findall(r'f([0-9.]+)',string)[0]
+		except IndexError:
+			print('Improper format string in {}'.format(self.fpath))
+			sys.exit()
 
 
 class SDFile(object):
